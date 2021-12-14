@@ -57,16 +57,43 @@
                   <ul @click.stop=""  class="employee-menu dropdown-menu py-0 border-0" aria-labelledby="dropdownMenuButton1">
                     <li><a class="dropdown-item py-3">
                       <span class="ed-eye text-eden-mint me-3 fw-bold"></span>
-                      <span class="body-1">View more details</span>
+                      <span class="body-1">View details</span>
                     </a></li>
                     <li><a class="dropdown-item py-3" href="#">
-                      <span class="ed-edit text-eden-mint me-3 fw-bold"></span>
-                      <span class="body-1">Update salary</span>
+                      <span class="ed-pause text-eden-mint me-3 fw-bold"></span>
+                      <span class="body-1">Freeze Member</span>
                     </a></li>
                     <li>
                       <a class="dropdown-item cursor-pointer py-3" >
-                        <span class="ed-archive text-bad-red me-3 fw-bold"></span>
-                        <span class="body-1">Archive Employee</span>
+                        <span class="ed-trash text-bad-red me-3 fw-bold"></span>
+                        <span class="body-1">Remove Member</span>
+                      </a>
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+              <tr class="cursor-pointer">
+                <td class="image-padding"><img class="avatar avatar-sm" src="https://res.cloudinary.com/rohing/image/upload/v1585572497/harley-davidson-1HZcJjdtc9g-unsplash_vwslej.jpg"></td>
+                <td class="additional-padding">Jessica Brownly</td>
+                <td class=" name-decoration">j.brownly@gmail.com</td>
+                <td>+33 956 340 4057</td>
+                <td>22/01/1984</td>
+                <td>REGISTERED</td>
+                <td class="additional-padding">
+                  <span  data-bs-display="static" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" class="dropdown-toggle ed-more-vertical icon-border fs-5 cursor-pointer"></span>
+                  <ul @click.stop=""  class="employee-menu dropdown-menu py-0 border-0" aria-labelledby="dropdownMenuButton1">
+                    <li><a class="dropdown-item py-3">
+                      <span class="ed-eye text-eden-mint me-3 fw-bold"></span>
+                      <span class="body-1">View details</span>
+                    </a></li>
+                    <li><a class="dropdown-item py-3" href="#">
+                      <span class="ed-play text-eden-mint me-3 fw-bold"></span>
+                      <span class="body-1">Unfreeze Member</span>
+                    </a></li>
+                    <li>
+                      <a class="dropdown-item cursor-pointer py-3" >
+                        <span class="ed-trash text-bad-red me-3 fw-bold"></span>
+                        <span class="body-1">Remove Member</span>
                       </a>
                     </li>
                   </ul>
