@@ -25,7 +25,11 @@
             <ul @click.stop="" class="dropdown-menu py-0 border-0" aria-labelledby="dropdownMenuButton1">
               <li><a class="dropdown-item py-3" @click.prevent="showProfileModal">
                 <span class="ed-user text-eden-mint me-3 fw-bold"></span>
-                <span class="body-1">Profile</span>
+                <span class="body-1">Personal profile</span>
+              </a></li>
+              <li><a class="dropdown-item py-3" @click.prevent="">
+                <span class="ed-home text-eden-mint me-3 fw-bold"></span>
+                <span class="body-1">Company profile</span>
               </a></li>
               <li><a class="dropdown-item py-3" @click.prevent="settingsModal.show()" href="#">
                 <span class="ed-settings text-eden-mint me-3 fw-bold"></span>
