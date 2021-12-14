@@ -82,6 +82,11 @@ export default {
           name: 'Stakeholder',
           iconClass: 'ed-pie-chart',
           path: '/stakeholder'
+        },
+        {
+          name: 'Salary Advance',
+          iconClass: 'ed-salary-advance',
+          path: '/salary-advance'
         }
       ],
       settingsModal: null

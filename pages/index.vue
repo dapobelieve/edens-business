@@ -14,6 +14,9 @@
 <!--      :disabled="!currentLoan"-->
       <button v-if="$route.name.includes('loans')"  @click="shouldRequestLoan"  class="d-none ms-auto d-xl-block btn btn-jungle-green btn-sm ms-auto">Request Loan
       </button>
+      <button v-if="$route.name.includes('salary-advance')"   class="d-none ms-auto d-xl-block btn btn-jungle-green btn-sm ms-auto">
+        Invite HR Members
+      </button>
 
     </div>
     <keep-alive>
@@ -57,7 +60,8 @@ export default {
           return 'Good morning'
         }
         if (time > 12) {
-          if(time < 5)
+          console.log(time)
+          if(time < 17)
             return 'Good afternoon'
           else return 'Good Evening'
         }
