@@ -1,7 +1,7 @@
 <template>
   <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-      <template v-if="step === 1">
+      <!-- <template v-if="step === 1">
         <keep-alive>
           <LoanType @close-loan="close" @loan-proceed="form={...form,...$event}; step=2" />
         </keep-alive>
@@ -15,24 +15,24 @@
         <keep-alive>
           <Identification @back="back" @loan-proceed="form={...form,...$event}; step=4" />
         </keep-alive>
-      </template>
-      <template v-if="step === 4">
+      </template> -->
+      <template v-if="step === 1">
         <keep-alive>
-          <SetAmount @back="back" @loan-proceed="form={...form,...$event}; step=5" />
+          <SetAmount @back="close" @loan-proceed="form={...form,...$event}; step=2" />
         </keep-alive>
       </template>
-      <template v-if="step === 5">
+      <template v-if="step === 2">
         <keep-alive>
-          <SetDuration @back="back" @loan-proceed="form={...form,...$event}; step=6" />
+          <SetDuration @back="back" @loan-proceed="form={...form,...$event}; step=3" />
         </keep-alive>
       </template>
-      <template v-if="step === 6">
+      <!-- <template v-if="step === 3">
         <keep-alive>
           <Payslip @back="back" @loan-proceed="form={...form,...$event}; step=7" />
         </keep-alive>
-      </template>
-      <template v-if="step === 7">
-        <LoanSummary @back="back" :form="form" @success="submit"  />
+      </template> -->
+      <template v-if="step === 3">
+        <LoanSummary @back="back" :form="form" @success="submit" :btn="btn"  />
       </template>
     </div>
   </div>
@@ -71,8 +71,8 @@ export default {
     async submit() {
       this.btn.text= 'Processing...';
       this.btn.loading = true
-      try {
-        let res = await this.$store.dispatch('loan/loanRequest', {...this.form})
+      // try {
+      //   let res = await this.$store.dispatch('loan/loanRequest', {...this.form})
         this.$emit('loan-success')
         let toast = new bootstrap.Toast(document.getElementById('liveToast'), {
           delay: 7000,
@@ -84,12 +84,12 @@ export default {
               body: 'Your loan request has been sent to your organization HR for approval.'
             }}})
         toast.show()
-      }catch (e) {
-        this.error = e.message
-      }finally {
-        this.btn.text= 'Next';
-        this.btn.loading = false
-      }
+      // }catch (e) {
+      //   this.error = e.message
+      // }finally {
+      //   this.btn.text= 'Next';
+      //   this.btn.loading = false
+      // }
     },
     close() {
       let modal = bootstrap.Modal.getInstance(document.getElementById('loanModal'))

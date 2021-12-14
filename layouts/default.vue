@@ -78,11 +78,11 @@ export default {
           iconClass: 'ed-notification',
           path: '/notification'
         },
-        {
-          name: 'Stakeholder',
-          iconClass: 'ed-pie-chart',
-          path: '/stakeholder'
-        },
+        // {
+        //   name: 'Stakeholder',
+        //   iconClass: 'ed-pie-chart',
+        //   path: '/stakeholder'
+        // },
         {
           name: 'Salary Advance',
           iconClass: 'ed-salary-advance',
