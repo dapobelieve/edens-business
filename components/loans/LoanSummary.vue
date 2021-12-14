@@ -1,29 +1,29 @@
 <template>
   <div class="modal-content border-0">
     <div class="modal-header px-4">
-      <h5 class="modal-title">Request Loan</h5>
+      <h5 class="modal-title">Confirm loan request</h5>
       <a type="button" class="ms-auto text-eden-mint d-inline-flex align-items-center justify-content-center rounded-circle" style="height: 32px; width: 32px; background: rgba(146, 204, 191, 0.1);" data-bs-dismiss="modal" aria-label="Close">
         <span class="ed-x fs-5"></span>
       </a>
     </div>
     <div class="modal-body">
     <div class="" style="height: 30rem">
-      <p class="text-black-50 ms-3">Confirm loan request.</p>
-      <div class="px-lg-3">
-        <div class="border border-card" style="">
+      <!-- <p class="text-black-50 ms-3">Confirm loan request.</p> -->
+      <div class="px-lg-3 pt-5">
+        <div class="border border-card rounded" style="">
           <div>
-            <div class="py-4 d-flex flex-column align-items-center">
+            <div class="py-4 d-flex flex-column align-items-center border-bottom">
               <div style="height: 3px; width: 25px; border-radius: 1.5px" class="bg-blue-green mb-1 border-0"></div>
               <span class="caption-2 text-black-50 mb-1">Loan amount</span>
               <p class="caption-2 text-eden-green m-0 p-0">${{formatAmount}}</p>
             </div>
           </div>
-          <div class="py-4 d-flex flex-column align-items-center">
+          <div class="py-4 d-flex flex-column align-items-center border-bottom">
             <div style="height: 3px; width: 25px; border-radius: 1.5px" class="bg-lavender-floral mb-1 border-0"></div>
             <span class="caption-2 text-black-50 mb-1">Payback Duration</span>
             <p class="caption-2 text-eden-green m-0 p-0">{{ form.duration }} Months</p>
           </div>
-          <div class="py-4 d-flex  flex-column align-items-center">
+          <div class="py-4 d-flex  flex-column align-items-center border-bottom">
             <div style="height: 3px; width: 25px; border-radius: 1.5px" class="bg-inch-worm mb-1 border-0"></div>
             <span class="caption-2 text-black-50 mb-1">Payback plan</span>
             <p class="caption-2 text-eden-green m-0 p-0">${{ paybackAmount }}/ <small class="fs-8 text-black-50">month</small></p>
@@ -49,7 +49,7 @@
 <script>
 import { mapGetters } from "vuex"
 export default {
-  props:  ['form'],
+  props:  ['form', 'btn'],
   data() {
     return {
       config: {
@@ -72,5 +72,7 @@ export default {
 </script>
 
 <style scoped>
-
+  .border-bottom{
+    border-bottom: 1px solid rgba(0, 32, 38, 0.1);
+  }
 </style>

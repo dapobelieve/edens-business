@@ -12,6 +12,27 @@
         <div class="d-flex align-items-center">
           <span class="ed-eden-tree fs-3 text-eden-mint me-1"></span>
           <span class="ed-eden text-white me-2"></span>
+          <span  data-bs-display="static" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" class="dropdown-toggle ed-more-vertical icon-border fs-5 cursor-pointer"></span>
+            <ul @click.stop=""  class="employee-menu dropdown-menu py-0 border-0" aria-labelledby="dropdownMenuButton1">
+              <li><a class="dropdown-item py-3">
+                <span class="ed-eye text-eden-mint me-3 fw-bold"></span>
+                <span class="body-1">View card details</span>
+              </a></li>
+              <li><a class="dropdown-item py-3" href="#">
+                <span class="ed-pause text-eden-mint me-3 fw-bold"></span>
+                <span class="body-1">Freeze card</span>
+              </a></li>
+              <li><a class="dropdown-item py-3" href="#">
+                <span class="ed-edit-3 text-eden-mint me-3 fw-bold"></span>
+                <span class="body-1">Change PIN</span>
+              </a></li>
+              <li>
+                <a class="dropdown-item cursor-pointer py-3" >
+                  <span class="ed-trash text-bad-red me-3 fw-bold"></span>
+                  <span class="body-1">Delete card</span>
+                </a>
+              </li>
+            </ul>
         </div>
       </div>
       <div>
@@ -98,5 +119,14 @@ export default {
 }
 .light {
 
+}
+
+.employee-menu{
+  left: 0 !important;
+  margin-top: 22px !important;
+  margin-left: 61px;
+  min-width: 16rem;
+  left: auto;
+  top: auto;
 }
 </style>
