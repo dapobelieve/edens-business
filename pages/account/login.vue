@@ -61,8 +61,8 @@ export default {
   },
   watch: {
     activeTab(newVal) {
-      if (newVal === 'Business Account')
-        window.location.href = process.env.NUXT_ENV_ORGANIZATION_URL
+      if (newVal === 'Personal Account')
+        window.location.href = process.env.NUXT_ENV_CUSTOMER_URL
     }
   },
   validations: {
