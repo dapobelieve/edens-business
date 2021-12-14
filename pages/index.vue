@@ -14,7 +14,7 @@
 <!--      :disabled="!currentLoan"-->
       <button v-if="$route.name.includes('loans')"  @click="shouldRequestLoan"  class="d-none ms-auto d-xl-block btn btn-jungle-green btn-sm ms-auto">Request Loan
       </button>
-      <button v-if="$route.name.includes('salary-advance')"   class="d-none ms-auto d-xl-block btn btn-jungle-green btn-sm ms-auto">
+      <button @click="inviteHrModal.show()" v-if="$route.name.includes('salary-advance')"  class="d-none ms-auto d-xl-block btn btn-jungle-green btn-sm ms-auto">
         Invite HR Members
       </button>
 
@@ -22,7 +22,8 @@
     <keep-alive>
       <NuxtChild class="flex-grow-1 px-2 px-xl-0" />
     </keep-alive>
-    <MobileNav />
+<!--    <MobileNav />-->
+    <InviteHr id="invite-hr" />
     <LoanModal @loan-success="requestLoanModal.hide();" @cannot-request="requestLoanModal.hide();" id="loanModal" />
     <CannotRequestLoanModal  />
 
@@ -45,8 +46,9 @@
 <script>
 import { mapGetters } from "vuex"
 import SettingsModal from '~/components/settings/SettingsModal'
+import InviteHr from '~/components/business/InviteHr'
 export default {
-  components: { SettingsModal },
+  components: { SettingsModal, InviteHr },
   layout: "default",
   computed: {
     computeGreeting()  {
@@ -80,6 +82,7 @@ export default {
   data() {
     return {
       cannotRequestModal:  null,
+      inviteHrModal:  null,
       requestLoanModal: null,
       img: "https://res.cloudinary.com/rohing/image/upload/v1585572497/harley-davidson-1HZcJjdtc9g-unsplash_vwslej.jpg",
     }
@@ -98,7 +101,9 @@ export default {
     this.cannotRequestModal = new bootstrap.Modal(cannotReq)
 
     const requestLoan = document.getElementById('loanModal');
+    const _inviteHrModal = document.getElementById('invite-hr');
     this.requestLoanModal = new bootstrap.Modal(requestLoan);
+    this.inviteHrModal = new bootstrap.Modal(_inviteHrModal);
 
   }
 }

@@ -66,7 +66,7 @@ export default {
   data () {
     return {
       userData: {},
-      step: 3,
+      step: 1,
       showAccountUpgrade: false,
       fund: {
         method: ''
