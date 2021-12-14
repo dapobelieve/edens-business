@@ -62,7 +62,6 @@ export default {
           return 'Good morning'
         }
         if (time > 12) {
-          console.log(time)
           if(time < 17)
             return 'Good afternoon'
           else return 'Good Evening'
