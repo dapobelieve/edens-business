@@ -47,7 +47,7 @@ export default {
   data() {
     return {
       tabs: ['Personal Account', 'Business Account'],
-      activeTab: "Personal Account",
+      activeTab: "Business Account",
       error: null,
       form: {
         email: null,
@@ -61,7 +61,7 @@ export default {
   },
   watch: {
     activeTab(newVal) {
-      if (newVal === 'Organization')
+      if (newVal === 'Business Account')
         window.location.href = process.env.NUXT_ENV_ORGANIZATION_URL
     }
   },
