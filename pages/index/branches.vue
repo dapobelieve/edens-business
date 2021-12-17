@@ -8,11 +8,11 @@
               <div class="border-cadet-grey me-2">
                 <span class="ed-user text-cadet-grey fs-4"></span>
               </div>
-              <h5>HR Member</h5>
+              <h5>Branches</h5>
             </div>
             <div class="ms-sm-5">
               <form class="search position-relative">
-                <input name='search-records' type='search' autocomplete='randomstring' class="form-control" placeholder="Search HR Members" v-model="search">
+                <input name='search-records' type='search' autocomplete='randomstring' class="form-control" placeholder="Search branches" v-model="search">
                 <span class="ed-search cursor-pointer text-eden-mint position-absolute"></span>
               </form>
               <!-- <div class="search position-relative">
@@ -36,10 +36,7 @@
                     </span>
                 </span>
                 </th>
-                <th scope="col">EMAIL</th>
-                <th scope="col">PHONE</th>
-                <th scope="col">REGISTRATION DATE</th>
-                <th scope="col">STATUS</th>
+                <th scope="col">ADDRESS</th>
                 <th></th>
 
               </tr>
@@ -47,26 +44,23 @@
               <tbody >
               <tr class="cursor-pointer">
                 <td class="image-padding"><img class="avatar avatar-sm" src="https://res.cloudinary.com/rohing/image/upload/v1585572497/harley-davidson-1HZcJjdtc9g-unsplash_vwslej.jpg"></td>
-                <td class="additional-padding">Jessica Brownly</td>
-                <td class=" name-decoration">j.brownly@gmail.com</td>
-                <td>+33 956 340 4057</td>
-                <td>22/01/1984</td>
-                <td>PENDING</td>
+                <td class="additional-padding name-decoration">Branch name HR</td>
+                <td>Old Labor Ministry Building, UN Drive, Monrovia</td>
                 <td class="additional-padding">
                   <span  data-bs-display="static" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" class="dropdown-toggle ed-more-vertical icon-border fs-5 cursor-pointer"></span>
                   <ul @click.stop=""  class="employee-menu dropdown-menu py-0 border-0" aria-labelledby="dropdownMenuButton1">
-                    <li @click="showHRDetails('data')"><a class="dropdown-item py-3">
+                    <li @click="showBranchDetails('data')"><a class="dropdown-item py-3">
                       <span class="ed-eye text-eden-mint me-3 fw-bold"></span>
                       <span class="body-1">View details</span>
                     </a></li>
                     <li><a class="dropdown-item py-3" href="#">
-                      <span class="ed-pause text-eden-mint me-3 fw-bold"></span>
-                      <span class="body-1">Freeze Member</span>
+                      <span class="ed-edit text-eden-mint me-3 fw-bold"></span>
+                      <span class="body-1">Edit details</span>
                     </a></li>
                     <li>
                       <a class="dropdown-item cursor-pointer py-3" >
                         <span class="ed-trash text-bad-red me-3 fw-bold"></span>
-                        <span class="body-1">Remove Member</span>
+                        <span class="body-1">Remove Branch</span>
                       </a>
                     </li>
                   </ul>
@@ -74,26 +68,23 @@
               </tr>
               <tr class="cursor-pointer">
                 <td class="image-padding"><img class="avatar avatar-sm" src="https://res.cloudinary.com/rohing/image/upload/v1585572497/harley-davidson-1HZcJjdtc9g-unsplash_vwslej.jpg"></td>
-                <td class="additional-padding">Jessica Brownly</td>
-                <td class=" name-decoration">j.brownly@gmail.com</td>
-                <td>+33 956 340 4057</td>
-                <td>22/01/1984</td>
-                <td>REGISTERED</td>
+                <td class="additional-padding name-decoration">Branch name HR</td>
+                <td>Old Labor Ministry Building, UN Drive, Monrovia</td>
                 <td class="additional-padding">
                   <span  data-bs-display="static" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" class="dropdown-toggle ed-more-vertical icon-border fs-5 cursor-pointer"></span>
                   <ul @click.stop=""  class="employee-menu dropdown-menu py-0 border-0" aria-labelledby="dropdownMenuButton1">
-                    <li><a class="dropdown-item py-3">
+                    <li @click="showBranchDetails('data')"><a class="dropdown-item py-3">
                       <span class="ed-eye text-eden-mint me-3 fw-bold"></span>
                       <span class="body-1">View details</span>
                     </a></li>
                     <li><a class="dropdown-item py-3" href="#">
-                      <span class="ed-play text-eden-mint me-3 fw-bold"></span>
-                      <span class="body-1">Unfreeze Member</span>
+                      <span class="ed-edit text-eden-mint me-3 fw-bold"></span>
+                      <span class="body-1">Edit details</span>
                     </a></li>
                     <li>
                       <a class="dropdown-item cursor-pointer py-3" >
                         <span class="ed-trash text-bad-red me-3 fw-bold"></span>
-                        <span class="body-1">Remove Member</span>
+                        <span class="body-1">Remove Branch</span>
                       </a>
                     </li>
                   </ul>
@@ -139,7 +130,7 @@
       </div>
     </template>
 
-    <HRdetails :details="details" id="hr-details-modal" />
+    <!-- <HRdetails :details="details" id="hr-details-modal" /> -->
   </div>
 </template>
 
@@ -159,18 +150,15 @@ export default {
   },
 
   methods: {
-    showHRDetails(data) {
+    showBranchDetails(data) {
       this.details = data;
-      this.$nextTick(() => {
-        this.detailsModal.show()
-      })
     },
   },
 
-   mounted() {
-    let _detailsModal  = document.getElementById('hr-details-modal');
-    this.detailsModal = new bootstrap.Modal(_detailsModal);
-  }
+//    mounted() {
+//     let _detailsModal  = document.getElementById('hr-details-modal');
+//     this.detailsModal = new bootstrap.Modal(_detailsModal);
+//   }
 }
 
 </script>
