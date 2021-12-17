@@ -17,12 +17,16 @@
       <button @click="inviteHrModal.show()" v-if="$route.name.includes('salary-advance')"  class="d-none ms-auto d-xl-block btn btn-jungle-green btn-sm ms-auto">
         Invite HR Members
       </button>
+      <button @click="inviteBranchModal.show()" v-if="$route.name.includes('branches')"  class="d-none ms-auto d-xl-block btn btn-jungle-green btn-sm ms-auto">
+        Add New Branch
+      </button>
 
     </div>
     <keep-alive>
       <NuxtChild class="flex-grow-1 px-2 px-xl-0" />
     </keep-alive>
 <!--    <MobileNav />-->
+    <InviteBranch id="invite-branch" />
     <InviteHr id="invite-hr" />
     <LoanModal @loan-success="requestLoanModal.hide();" @cannot-request="requestLoanModal.hide();" id="loanModal" />
     <CannotRequestLoanModal  />
@@ -47,8 +51,9 @@
 import { mapGetters } from "vuex"
 import SettingsModal from '~/components/settings/SettingsModal'
 import InviteHr from '~/components/business/InviteHr'
+import InviteBranch from '~/components/business/InviteBranch'
 export default {
-  components: { SettingsModal, InviteHr },
+  components: { SettingsModal, InviteHr, InviteBranch },
   layout: "default",
   computed: {
     computeGreeting()  {
@@ -83,6 +88,7 @@ export default {
       cannotRequestModal:  null,
       inviteHrModal:  null,
       requestLoanModal: null,
+      inviteBranchModal:null,
       img: "https://res.cloudinary.com/rohing/image/upload/v1585572497/harley-davidson-1HZcJjdtc9g-unsplash_vwslej.jpg",
     }
   },
@@ -101,8 +107,10 @@ export default {
 
     const requestLoan = document.getElementById('loanModal');
     const _inviteHrModal = document.getElementById('invite-hr');
+    const _inviteBranchModal = document.getElementById('invite-branch');
     this.requestLoanModal = new bootstrap.Modal(requestLoan);
     this.inviteHrModal = new bootstrap.Modal(_inviteHrModal);
+    this.inviteBranchModal = new bootstrap.Modal(_inviteBranchModal);
 
   }
 }
