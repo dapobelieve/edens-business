@@ -78,6 +78,11 @@ export default {
           iconClass: 'ed-loans',
         },
         {
+          name: 'Branches',
+          iconClass: 'ed-notification',
+          path: '/branches'
+        },
+        {
           name: 'Notification',
           iconClass: 'ed-notification',
           path: '/notification'
