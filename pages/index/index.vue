@@ -97,7 +97,18 @@ import UpgradeModal from '~/components/wallet/upgrade/UpgradeModal'
 import RequestMoneyModal from '~/components/wallet/request-money/RequestMoneyModal'
 import UpgradeCard from '~/components/business/UpgradeCard'
   export default {
-  components: { UpgradeCard, RequestMoneyModal, UpgradeModal, PulseComponent, RequestCardModal, CardDetailsModal, Delete, ChangePin,  SendMoneyModal, WalletTransactions, FundWalletModal, CreditcardComponent },
+  components: { UpgradeCard,
+    RequestMoneyModal,
+    UpgradeModal,
+    PulseComponent,
+    RequestCardModal,
+    CardDetailsModal,
+    Delete,
+    ChangePin,
+    SendMoneyModal,
+    WalletTransactions,
+    FundWalletModal,
+    CreditcardComponent },
   data () {
     return {
       freeze: false,
@@ -128,8 +139,12 @@ import UpgradeCard from '~/components/business/UpgradeCard'
     }),
   },
   async asyncData(ctx) {
-    await ctx.store.dispatch("wallet/getWallet")
-    await ctx.store.dispatch("wallet/getTransactions")
+   try {
+     await ctx.store.dispatch("wallet/getWallet")
+     await ctx.store.dispatch("wallet/getTransactions")
+   }catch (e) {
+     console.log(e)
+   }
   },
   async mounted() {
     let fundWallet = document.getElementById('fund-wallet');

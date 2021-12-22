@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3 class="mt-4">Set your password</h3>
+    <h3 class="mt-4">Set account password</h3>
     <p class="mt-1 mb-5 body-1 text-black-50">Create a password to secure your account.</p>
     <form class="flex-grow-1">
       <div class="mb-4">
@@ -11,11 +11,10 @@
         <PasswordComponent :class="[$v.form.confirmPassword.$error ? 'eden-text-input-error': '']" placeholder="Confirm Password" v-model="$v.form.confirmPassword.$model" />
         <small class="fs-7 text-bad-red" v-if="$v.form.confirmPassword.$error">{{confirmErr}}</small>
       </div>
-      <div class="d-flex mb-6 justify-content-between pt-4">
-        <button :disabled="otpVerified" @click.prevent="$emit('back')" class="btn btn-outline-eden-mint px-3 me-3" >
-          <span class="ed-arrow-left"></span>Back
-        </button>
-        <eden-button :disabled="btn.loading" :loading="btn.loading" class="btn btn-jungle-green" @click.prevent="submitPass">{{ btn.text }}</eden-button>
+      <div class="d-flex mb-6 justify-content-between pt-4 ">
+          <button @click.prevent="$emit('back')" class="btn btn-outline-eden-mint px-3 me-3" >
+            <span class="ed-arrow-left"></span>Back</button>
+          <eden-button :disabled="btn.loading" :loading="btn.loading" class="btn btn-jungle-green" @click.prevent="submitPass">Proceed</eden-button>
       </div>
     </form>
   </div>
@@ -73,13 +72,6 @@ export default {
       if (!this.$v.form.password.required) return "Password is required";
       if (!this.$v.form.password.sameAsPassword) return `Passwords don't match`;
     }
-  },
-  mounted() {
-    document.addEventListener("keypress", (event) => {
-      if (event.key === "Enter") {
-        this.submitPass();
-      }
-    });
   }
 }
 </script>
