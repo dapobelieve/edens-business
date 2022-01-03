@@ -15,6 +15,7 @@ export const state = () => ({
   },
   // user: null,
   config:null,
+
   toast: {},
   notifications: null
 })
@@ -40,13 +41,14 @@ export const actions = {
     return res
   },
   async login({commit,state}, payload) {
-    let res = await this.$axios.$post('auth/login', {...payload})
+    let res = { user: null, token: null};
+    // let res = await this.$axios.$post('auth/login', {...payload})
     const {token, user} = res
-    Cookies.set('x-access-token', token.token)
-    commit("setAuthUser", { ...user, user_settings: {push_notification: false,
-            sms_notification: true,
-            email_notification: false,} })
-    return res
+    Cookies.set('x-access-token', 'token.token')
+    commit("setAuthUser", { ...user, user_settings: { push_notification: false,
+        sms_notification: true,
+        email_notification: false,} })
+    return {}
   },
   async me({dispatch, commit}) {
     let res = await this.$axios.$get('/users/me');

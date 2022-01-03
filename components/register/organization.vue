@@ -1,28 +1,22 @@
 <template>
   <div>
     <h3 class="mt-4">Let’s get you registered.</h3>
-    <p class="mt-1 mb-5 body-1 fw-normal">Select your organization from the list.</p>
-    <form @keyup.enter="proceed" class="flex-grow-1">
+    <p class="mt-1 mb-5 body-1 fw-normal text-black-50">Tell us about your organization</p>
+    <form class="flex-grow-1">
       <div class="mb-4">
-        <SelectComponent :options="organizations" v-model="organization" />
-        <small class="fs-7 text-bad-red" v-if="$v.organization.$error">{{orgErrs}}</small>
-      </div>
-      <div class="mb-5">
-        <label class="d-flex align-items-center">
-          <input v-model="noOrganization" type="checkbox" class="form-check-input me-2 mt-0 cursor-pointer"> <span class="body-1">Check this box if your organization is not listed.</span>
-        </label>
-      </div>
-      <div class="mb-4">
-        <input :disabled="!noOrganization" class="form-control" v-model="$v.form.organization_name.$model" placeholder="Your Organisation name">
+        <input class="form-control" v-model="$v.form.organization_name.$model" placeholder="Business name">
         <small class="fs-7 text-bad-red" v-if="$v.form.organization_name.$error">{{nameErr}}</small>
       </div>
-
       <div class="mb-5">
-        <input :disabled="!noOrganization" class="form-control" v-model="$v.form.organization_email.$model" placeholder="Your Organisation email address">
-        <small class="fs-7 text-bad-red" v-if="$v.form.organization_email.$error">{{emailErr}}</small>
+        <input class="form-control" v-model="$v.form.email.$model" placeholder="Business email address">
+        <small class="fs-7 text-bad-red" v-if="$v.form.email.$error">{{emailErr}}</small>
+      </div>
+      <div class="mb-4">
+        <SelectComponent :options="types" placeholder="Business type" v-model="organization" />
+        <small class="fs-7 text-bad-red" v-if="$v.organization.$error">{{orgErrs}}</small>
       </div>
 
-      <div class="d-grid">
+      <div class="d-grid mt-7">
         <button @click.prevent="proceed" class="btn btn-jungle-green justify-content-center">Proceed</button>
       </div>
 
@@ -39,11 +33,16 @@ export default {
   data() {
     return {
       noOrganization: false,
+      types: [
+        {name: 'Tech', value: 1},
+        {name: 'Educational', value: 2},
+        {name: 'Financial', value: 3},
+        {name: 'Religious', value: 4},
+      ],
       organization: null,
-      organizations: [],
       form: {
-        organization_id: null,
-        organization_email: null,
+        organization_industry: "tech",
+        email: null,
         organization_name: null,
       },
     }
@@ -52,34 +51,23 @@ export default {
     noOrganization(newVal) {
       if(newVal) {
         this.organization = null
-        this.form.organization_id = null
       }
-    },
-    organization(newVal) {
-      if (newVal)
-        this.form.organization_id = newVal.value
     }
   },
   validations:{
-    organization: { required: requiredIf(function(form) {
-      return !this.noOrganization
-      }) },
+    organization: { required },
     form: {
-      organization_email: { required: requiredIf(function(form) {
-        return this.noOrganization
-        }), email},
-      organization_name: { required: requiredIf(function(form) {
-          return this.noOrganization
-        })},
+      email: { required, email},
+      organization_name: { required },
     }
   },
   computed: {
     orgErrs() {
-      if (!this.$v.organization.required) return "Select your Organization"
+      if (!this.$v.organization.required) return "Select your Organization type"
     },
     emailErr() {
-      if (!this.$v.form.organization_email.required) return "Organization email address is required";
-      if (!this.$v.form.organization_email.email) return "Invalid email address format";
+      if (!this.$v.form.email.required) return "Organization email address is required";
+      if (!this.$v.form.email.email) return "Invalid email address format";
     },
     nameErr() {
       if (!this.$v.form.organization_name.required) return "Organization name is required";
@@ -93,20 +81,12 @@ export default {
       }
     }
   },
-  async mounted() {
-    document.addEventListener("keypress", (event) => {
-      if (event.key === "Enter") {
-        this.proceed();
-      }
-    });
-
+  async created() {
     try {
       let res = await this.$store.dispatch('auth/organizations')
-        res.reduce((acc, item) => {acc.push({ name: item.name, value: item.id })
-          return acc
-        }, this.organizations)
+      console.log('wawu')
     }catch(e) {
-      console.log(e)
+
     }
   }
 }

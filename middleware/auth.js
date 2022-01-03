@@ -6,9 +6,9 @@ export default async function(context) {
     // context.redirect('/account/login')
   }
   try {
-    await context.store.dispatch("auth/me");
-    context.store.commit('auth/setToken', token)
-    await context.store.dispatch("loan/getCurrentLoan")
+    // await context.store.dispatch("auth/me");
+    // context.store.commit('auth/setToken', token)
+    // await context.store.dispatch("loan/getCurrentLoan")
   }catch (e) {
     console.log(e)
   }

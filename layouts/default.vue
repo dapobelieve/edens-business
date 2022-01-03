@@ -84,7 +84,7 @@ export default {
         },
         {
           name: 'Branches',
-          iconClass: 'ed-notification',
+          iconClass: 'ed-branch',
           path: '/branches'
         },
 

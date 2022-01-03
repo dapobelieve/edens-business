@@ -1,27 +1,25 @@
 <template>
   <div class="register vh-100 px-xl-6 pt-6 d-flex flex-column">
     <logo />
-    <Indicator :half="half" :tabs="3" :activeTab="step" class="mt-4" />
+    <Indicator :half="half" :tabs="4" :activeTab="step" class="mt-4" />
     <div class="flex-grow-1">
-      <template v-if="step===0">
+      <template v-if="step===1">
         <keep-alive>
-          <organization @keyup.enter="proceed" @success="form = {...form, ...$event}; step=2" />
+          <organization @success="form = {...form, ...$event}; step=2" />
         </keep-alive>
       </template>
-      <template v-if="step === 1">
+      <template v-if="step === 2">
         <keep-alive>
-          <personal @success="form = {...form, ...$event}; step=2" />
-        </keep-alive>
-      </template>
-      <template v-if="step===2">
-        <keep-alive>
-          <PhoneNumber :demo="form" @back="step=1" @success="form = {...form, ...$event}; otpVerified=true; step=3" />
+          <PhoneNumber @back="step=1" @success="form = {...form, ...$event}; step=3" />
         </keep-alive>
       </template>
       <template v-if="step===3">
-<!--        <keep-alive>-->
-          <password :btn="btn" @back="step=2" :otpVerified="otpVerified" @success="form = {...form, ...$event}; register()" />
-<!--        </keep-alive>-->
+        <keep-alive>
+          <personal :otpVerified="otpVerified" @back="step=2" @success="form = {...form, ...$event}; step=4" />
+        </keep-alive>
+      </template>
+      <template v-if="step===4">
+        <password :btn="btn" @back="step=3" @success="form = {...form, ...$event}; register()" />
       </template>
     </div>
     <div class="text-center mb-4">
@@ -65,9 +63,7 @@ export default {
       this.btn.text = 'processing'
       try {
         let res = await this.$store.dispatch('auth/register', this.form)
-        // this.btn.loading = false
         window.location = '/'
-        // this.$router.replace('/')
       }catch (e) {
         console.log({e})
         this.btn.loading = false
