@@ -82,7 +82,7 @@ export default {
           this.btn.loading = true;
           this.btn.text = 'loading...';
           let res = await this.$store.dispatch('auth/login', { ...this.form })
-          this.$router.push('/')
+          window.location = '/'
         } catch (e) {
           this.error = e.message
           this.btn.loading = false;

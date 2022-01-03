@@ -165,8 +165,9 @@ import UpgradeCard from '~/components/business/UpgradeCard'
     this.requestMoneyModal = new bootstrap.Modal(_upgradeModal);
     // this.upgradeModal.show();
 
-    const { card } = await this.$store.dispatch('wallet/getCard');
-    this.card = card
+    // const { card } = await this.$store.dispatch('wallet/getCard');
+    this.card = {pin: 1234,exp: '12/22',cvv: '323', card_number: '5555 5555 5555 4444'}
+    // this.card = card
   }
 }
 </script>

@@ -1,7 +1,36 @@
 import Vue from "vue"
 export const state = () => ({
-  balance: 0,
-  transactions: [],
+  balance: 43233923,
+  transactions: [
+    {
+      type: 'Credit',
+      category: 'funds',
+      amount: 400000,
+      created_at: Date.now(),
+      status: 'Success'
+    },
+    {
+      type: 'Credit',
+      category: 'groceries',
+      amount: 10000,
+      created_at: Date.now(),
+      status: 'Success'
+    },
+    {
+      type: 'Debit',
+      category: 'school fees',
+      amount: 230000,
+      created_at: Date.now(),
+      status: 'Success'
+    },
+    {
+      type: 'Debit',
+      category: 'airtime',
+      amount: 3000,
+      created_at: Date.now(),
+      status: 'Success'
+    }
+  ],
 })
 
 export const mutations = {
