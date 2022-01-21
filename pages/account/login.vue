@@ -61,8 +61,8 @@ export default {
   },
   watch: {
     activeTab(newVal) {
-      if (newVal === 'Business Account')
-        window.location.href = process.env.NUXT_ENV_ORGANIZATION_URL
+      if (newVal === 'Personal Account')
+        window.location.href = process.env.NUXT_ENV_CUSTOMER_URL
     }
   },
   validations: {
@@ -82,7 +82,7 @@ export default {
           this.btn.loading = true;
           this.btn.text = 'loading...';
           let res = await this.$store.dispatch('auth/login', { ...this.form })
-          this.$router.push('/')
+          window.location = '/'
         } catch (e) {
           this.error = e.message
           this.btn.loading = false;

@@ -97,7 +97,18 @@ import UpgradeModal from '~/components/wallet/upgrade/UpgradeModal'
 import RequestMoneyModal from '~/components/wallet/request-money/RequestMoneyModal'
 import UpgradeCard from '~/components/business/UpgradeCard'
   export default {
-  components: { UpgradeCard, RequestMoneyModal, UpgradeModal, PulseComponent, RequestCardModal, CardDetailsModal, Delete, ChangePin,  SendMoneyModal, WalletTransactions, FundWalletModal, CreditcardComponent },
+  components: { UpgradeCard,
+    RequestMoneyModal,
+    UpgradeModal,
+    PulseComponent,
+    RequestCardModal,
+    CardDetailsModal,
+    Delete,
+    ChangePin,
+    SendMoneyModal,
+    WalletTransactions,
+    FundWalletModal,
+    CreditcardComponent },
   data () {
     return {
       freeze: false,
@@ -128,8 +139,12 @@ import UpgradeCard from '~/components/business/UpgradeCard'
     }),
   },
   async asyncData(ctx) {
-    await ctx.store.dispatch("wallet/getWallet")
-    await ctx.store.dispatch("wallet/getTransactions")
+   try {
+     await ctx.store.dispatch("wallet/getWallet")
+     await ctx.store.dispatch("wallet/getTransactions")
+   }catch (e) {
+     console.log(e)
+   }
   },
   async mounted() {
     let fundWallet = document.getElementById('fund-wallet');
@@ -150,8 +165,9 @@ import UpgradeCard from '~/components/business/UpgradeCard'
     this.requestMoneyModal = new bootstrap.Modal(_upgradeModal);
     // this.upgradeModal.show();
 
-    const { card } = await this.$store.dispatch('wallet/getCard');
-    this.card = card
+    // const { card } = await this.$store.dispatch('wallet/getCard');
+    this.card = {pin: 1234,exp: '12/22',cvv: '323', card_number: '5555 5555 5555 4444'}
+    // this.card = card
   }
 }
 </script>

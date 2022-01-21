@@ -27,7 +27,7 @@
                 <span class="ed-user text-eden-mint me-3 fw-bold"></span>
                 <span class="body-1">Personal profile</span>
               </a></li>
-              <li><a class="dropdown-item py-3" @click.prevent="">
+              <li><a class="dropdown-item py-3" @click.prevent="$router.push({name: 'index-company-profile'})">
                 <span class="ed-home text-eden-mint me-3 fw-bold"></span>
                 <span class="body-1">Company profile</span>
               </a></li>
@@ -87,16 +87,22 @@ export default {
           iconClass: 'ed-notification',
           path: '/notification'
         },
+        {
+          name: 'Branches',
+          iconClass: 'ed-branch',
+          path: '/branches'
+        },
+
         // {
         //   name: 'Stakeholder',
         //   iconClass: 'ed-pie-chart',
         //   path: '/stakeholder'
         // },
-        {
-          name: 'Salary Advance',
-          iconClass: 'ed-salary-advance',
-          path: '/salary-advance'
-        }
+        // {
+        //   name: 'Salary Advance',
+        //   iconClass: 'ed-salary-advance',
+        //   path: '/salary-advance'
+        // }
       ],
       settingsModal: null
     }

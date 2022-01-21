@@ -1,7 +1,7 @@
 <template>
   <div>
     <template v-if="!verifyPhone">
-      <h3 class="mt-4">Phone Number</h3>
+      <h3 class="mt-4">Official phone number</h3>
       <p class="mt-1 mb-5 body-1 fw-normal">Enter your phone number.</p>
       <div v-if="error" class="alert alert-danger mb-3 mt-3" role="alert">
         {{ error }}
@@ -17,31 +17,24 @@
             <small class="fs-7 text-bad-red" v-if="$v.form.phone_number.$error">{{phoneErr}}</small>
           </div>
         </div>
-        <div class="d-flex mb-6 justify-content-between pt-6">
+        <div class="d-flex justify-content-between pt-6 mb-6">
           <button class="btn btn-outline-eden-mint px-3 me-3" @click.prevent="$emit('back')">
-            <span class="ed-arrow-left"></span>Back
-          </button>
+            <span class="ed-arrow-left"></span>Back</button>
           <eden-button :disabled="btn.loading" :loading="btn.loading" class="btn btn-jungle-green" @click.prevent="sendOtp">{{ btn.text }}</eden-button>
         </div>
       </form>
     </template>
     <template v-else>
-      <VerifyOtp :phone="form.phone_number" :demo="demo" @verified="$emit('success', {...form}); otpVerified=true" />
+      <VerifyOtp :phone="form.phone_number" @verified="$emit('success', {...form}); otpVerified=true" />
     </template>
   </div>
 </template>
 
 <script>
 import { required, numeric } from "vuelidate/lib/validators";
-import VerifyOtp from '~/components/register/VerifyOtp';
-import EdenButton from '~/components/EdenButton';
+import EdenButton from '~/components/EdenButton'
 export default {
-  props: {
-    demo: {
-      type: Object
-    }
-  },
-  components: { EdenButton, VerifyOtp },
+  components: { EdenButton },
   data ()  {
     return {
       error: null,
@@ -74,27 +67,17 @@ export default {
           this.btn.loading = true
           if (this.form.phone_number) {
             let res = await this.$axios.post('internals/otp', { ...this.form, type: 'phone' })
-            await this.$axios.$post('internals/otp/email', {
-              email: this.demo.email
-            })
-
+            // alert("OTP sent")
             this.verifyPhone = true
           }
         } catch (e) {
-          this.error = e.message
+          this.error = e.response.data.message
         }finally {
           this.btn.loading = false
           this.btn.text = 'Proceed'
         }
       }
     },
-  },
-  mounted() {
-    document.addEventListener("keypress", (event) => {
-      if (event.key === "Enter") {
-        this.sendOtp();
-      }
-    });
   }
 }
 </script>
