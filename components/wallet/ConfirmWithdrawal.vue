@@ -1,17 +1,18 @@
 <template>
-  <div class="modal-content">
+  <div class="modal-content" style="max-width: 400px">
     <div class="modal-header px-4">
-      <h5 class="modal-title">Confirm withdrawal</h5>
+      <h5 class="modal-title">Confirm Transfer</h5>
       <a type="button" class="ms-auto text-eden-mint d-inline-flex align-items-center justify-content-center rounded-circle" style="height: 32px; width: 32px; background: rgba(146, 204, 191, 0.1);" data-bs-dismiss="modal" aria-label="Close">
         <span class="ed-x fs-5"></span>
       </a>
     </div>
-    <div class="modal-body">
+    <div class="modal-body" style="height: 10rem">
       <div class="px-2" style="">
-        <p class="body-1 text-black-50 fw-normal">Please confirm you want to withdraw
+        <p class="body-1 text-black-50 fw-normal">Please confirm you want to send
           <span class="fw-bold text-jungle-green">{{amount}}</span> to
           <template>
             <span v-if="info.method === 'bank'" class="fw-bold text-jungle-green">{{info.account_name}} ({{info.account_number}}, {{info.bank_details.name}})</span>
+            <span v-else-if="info.method === 'eden'" class="fw-bold text-jungle-green">{{info.account_name}} ({{info.destination_account_number}}, Edens360)</span>
             <span v-else class="fw-bold text-jungle-green">{{info.account_name}} ({{info.mobile_number}})</span>
           </template>
         </p>
@@ -21,7 +22,7 @@
       <button @click.prevent="$emit('back')" class="btn btn-sm btn-outline-eden-mint text-eden-green">
         <span class="ed-arrow-left text-eden-mint "></span>Back
       </button>
-      <eden-button :loading="btn.loading" :disabled="btn.loading" @click="next" type="button" class="btn btn-sm btn-jungle-green px-5 ">Withdraw</eden-button>
+      <eden-button :loading="btn.loading" :disabled="btn.loading" @click="next" type="button" class="btn btn-sm btn-jungle-green px-5 ">Send Money</eden-button>
     </div>
   </div>
 </template>

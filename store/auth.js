@@ -46,8 +46,11 @@ export const actions = {
   },
   async me({dispatch, commit}) {
     let res = await this.$axios.$get('/users/me');
-    commit("setAuthUser", res.user)
-    dispatch('configurations');
+    const {user} = res
+    commit("setAuthUser", { ...user, user_settings: { push_notification: false,
+      sms_notification: true,
+      email_notification: false,} })
+    // dispatch('configurations');
   },
   async update({commit, state},  payload) {
     let res = await this.$axios.$patch(`/users`, {...payload})

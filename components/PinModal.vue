@@ -9,10 +9,10 @@
     <div class="modal-body">
       <div class="px-2 my-3 d-flex mb-6" style="">
         <div class="pin-container d-flex justify-content-around w-100">
-          <div><input autofocus ref="pin" type="number" min="0" max="9" required class="form-control pin-box" placeholder="0"></div>
-          <div><input ref="pin" type="number" min="0" max="9" required class="form-control pin-box" placeholder="0"></div>
-          <div><input ref="pin" type="number" min="0" max="9" required class="form-control pin-box" placeholder="0"></div>
-          <div><input ref="pin" type="number" min="0" max="9" required class="form-control pin-box" placeholder="0"></div>
+          <div><input v-model="form.pin1" autofocus ref="pin" type="number" min="0" max="9" required class="form-control pin-box" placeholder="0"></div>
+          <div><input v-model="form.pin2" ref="pin" type="number" min="0" max="9" required class="form-control pin-box" placeholder="0"></div>
+          <div><input v-model="form.pin3" ref="pin" type="number" min="0" max="9" required class="form-control pin-box" placeholder="0"></div>
+          <div><input v-model="form.pin4" ref="pin" type="number" min="0" max="9" required class="form-control pin-box" placeholder="0"></div>
         </div>
       </div>
     </div>
@@ -31,16 +31,22 @@ export default {
     return {
       btn: {loading: false},
       form: {
-        description: null
+        description: null,
+        pin:null,
+        pin1:null,
+        pin2: null,
+        pin3: null,
+        pin4: null
       }
     }
   },
   methods: {
     verifyPin() {
+      this.form.pin = this.form.pin1 + this.form.pin2 + this.form.pin3 + this.form.pin4
       this.btn.loading = true
       setTimeout(() => {
         this.btn.loading = false
-        this.$emit('success')
+        this.$emit('success', this.form.pin)
       }, 3000)
     }
   },
