@@ -10,7 +10,7 @@
       </template>
       <template v-if="step === 2">
         <keep-alive>
-          <PhoneNumber @back="step=1" @success="form = {...form, ...$event}; step=3" />
+          <PhoneNumber :demo="form" @back="step=1" @success="form = {...form, ...$event}; step=3" />
         </keep-alive>
       </template>
       <template v-if="step===3">

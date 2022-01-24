@@ -25,16 +25,22 @@
       </form>
     </template>
     <template v-else>
-      <VerifyOtp :phone="form.phone_number" @verified="$emit('success', {...form}); otpVerified=true" />
+        <VerifyOtp :phone="form.phone_number" :demo="demo" @verified="$emit('success', {...form}); otpVerified=true" />
     </template>
   </div>
 </template>
 
 <script>
 import { required, numeric } from "vuelidate/lib/validators";
+import VerifyOtp from '~/components/register/VerifyOtp';
 import EdenButton from '~/components/EdenButton'
 export default {
-  components: { EdenButton },
+  props: {
+    demo: {
+      type: Object
+    }
+  },
+  components: { EdenButton, VerifyOtp },
   data ()  {
     return {
       error: null,
@@ -67,6 +73,9 @@ export default {
           this.btn.loading = true
           if (this.form.phone_number) {
             let res = await this.$axios.post('internals/otp', { ...this.form, type: 'phone' })
+            await this.$axios.$post('internals/otp/email', {
+              email: this.demo.email
+            })
             // alert("OTP sent")
             this.verifyPhone = true
           }
