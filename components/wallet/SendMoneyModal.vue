@@ -13,6 +13,15 @@
               <div class="mb-4">
                 <h3>How would you like to send money?</h3>
               </div>
+              <div @click="sendBy.method = 'eden'" :class="sendBy.method === 'eden' ? 'selected-fund-method' : ''"  class="fund-option px-4 mb-4 d-flex py-3 align-items-center cursor-pointer">
+                <div class="rounded-circle flex-shrink-0 bg-eden-mint d-inline-flex align-items-center me-4 justify-content-center">
+                  <img src="~/assets/internal-transfer.svg">
+                </div>
+                <div>
+                  <p class="mb-0 caption-2">Transfer to Eden user</p>
+                  <p class="mb-0 body-1 text-black-50 fw-normal">Send money to any Eden users</p>
+                </div>
+              </div>
               <div @click="sendBy.method = 'bank'" :class="sendBy.method === 'bank' ? 'selected-fund-method' : ''"  class="fund-option px-4 mb-4 d-flex py-3 align-items-center cursor-pointer">
                 <div class="rounded-circle flex-shrink-0 bg-eden-mint d-inline-flex align-items-center me-4 justify-content-center">
                   <img src="~/assets/bank-transfer.svg">
@@ -37,6 +46,11 @@
             <button :disabled="!sendBy.method" @click="showSendingOptions = !showSendingOptions; step = 2" type="button" class="btn btn-sm btn-jungle-green px-5">Next</button>
           </div>
         </div>
+        <keep-alive>
+        <SendMoneyInternal @back="showSendingOptions = true; step = 1"
+                    v-if="!showSendingOptions && sendBy.method === 'eden' && step===2"
+                    @success="form =  {...form, ...$event}; step = 4" />
+       </keep-alive>
       <keep-alive>
         <SendByBank @back="showSendingOptions = true; step = 1"
                     v-if="!showSendingOptions && sendBy.method === 'bank' && step===2"
@@ -61,13 +75,16 @@
 </template>
 
 <script>
+import SendMoneyInternal from '~/components/wallet/SendMoneyInternal'
 import SendByBank from '~/components/wallet/SendByBank'
 import SendByMobile from '~/components/wallet/SendByMobile'
 import SendMoneyDesc from '~/components/wallet/SendMoneyDesc'
 import ConfirmWithdrawal from '~/components/wallet/ConfirmWithdrawal'
 import PinModal from '~/components/PinModal'
+import { mapGetters } from "vuex"
+
 export default {
-  components: { PinModal, ConfirmWithdrawal, SendByMobile, SendByBank, SendMoneyDesc },
+  components: { PinModal, ConfirmWithdrawal, SendByMobile, SendByBank, SendMoneyDesc, SendMoneyInternal },
   data () {
     return {
       showSendingOptions: true,
@@ -75,38 +92,82 @@ export default {
       sendBy: {
         method: ''
       },
-      form: {
-        account_name:"Dapo Eden",
-        account_number:"23030303",
-        amount:"2000",
-        bank:1,
-        bank_details: {name: 'Edens360'}
-      }
+      form:{}
+      // form: {
+      //   account_name:"Dapo Eden",
+      //   account_number:"23030303",
+      //   amount:"2000",
+      //   bank:1,
+      //   bank_details: {name: 'Edens360'}
+      // }
     }
   },
+  computed: {
+    ...mapGetters({
+      walletNumber: "wallet/walletNumber"
+    }),
+  },
   methods: {
-    async withdrawFund() {
-      try {
-        let res = await this.$store.dispatch('wallet/withdraw', {
-          ...this.form,
-          category: 'Misc',
-          description: this.form.description || 'Eden description'
-        })
-
-        this.close()
-
-        let toast = new bootstrap.Toast(document.getElementById('liveToast'), {
+    async withdrawFund(pin) {
+      if(this.sendBy.method === 'eden'){
+        try {
+          let res = await this.$store.dispatch('wallet/internalTransfer', {
+            ...this.form,
+            sender_account_number: this.walletNumber,
+            pin,
+            category: 'Misc',
+            description: this.form.description || 'Eden description'
+          })
+          this.close()
+          let toast = new bootstrap.Toast(document.getElementById('liveToast'), {
+            delay: 7000,
+            animation: true,
+          })
+          this.$store.commit('auth/setStates', {toast: {show: true,
+            data: {
+              header: 'Transfer Successfull!',
+              body: 'Funds on the way'
+            }}})
+          toast.show()
+        }catch (e) {
+          let toast = new bootstrap.Toast(document.getElementById('liveToast'), {
           delay: 7000,
           animation: true,
-        })
-        this.$store.commit('auth/setStates', {toast: {show: true,
-          data: {
-            header: 'Withdrawal Success!',
-            body: 'Funds on the way'
-          }}})
-        toast.show()
-      }catch (e) {
-        console.log({e})
+          })
+          this.$store.commit('auth/setStates', {toast: {show: true,
+              data: {
+                header: 'Ooops!',
+                body: `${e.message}`
+              }}})
+          toast.show()
+          this.error = e.message
+        }finally {
+         await this.$store.dispatch("wallet/getWallet")
+
+      }
+      }else{
+        try {
+          let res = await this.$store.dispatch('wallet/withdraw', {
+            ...this.form,
+            category: 'Misc',
+            description: this.form.description || 'Eden description'
+          })
+
+          this.close()
+
+          let toast = new bootstrap.Toast(document.getElementById('liveToast'), {
+            delay: 7000,
+            animation: true,
+          })
+          this.$store.commit('auth/setStates', {toast: {show: true,
+            data: {
+              header: 'Withdrawal Success!',
+              body: 'Funds on the way'
+            }}})
+          toast.show()
+        }catch (e) {
+          console.log({e})
+        }
       }
     },
     close() {

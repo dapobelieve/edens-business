@@ -40,7 +40,7 @@ export const actions = {
     // let res = { user: null, token: null};
     let res = await this.$axios.$post('auth/login', {as:"Business", ...payload})
     const {token, user} = res
-    Cookies.set('x-access-token', 'token.token')
+    Cookies.set('x-access-token', token.token)
     commit("setAuthUser", { ...user, user_settings: { push_notification: false,
         sms_notification: true,
         email_notification: false,} })
@@ -48,8 +48,11 @@ export const actions = {
   },
   async me({dispatch, commit}) {
     let res = await this.$axios.$get('/users/me');
-    commit("setAuthUser", res.user)
-    dispatch('configurations');
+    const {user} = res
+    commit("setAuthUser", { ...user, user_settings: { push_notification: false,
+      sms_notification: true,
+      email_notification: false,} })
+    // dispatch('configurations');
   },
   async update({commit, state},  payload) {
     let res = await this.$axios.$patch(`/users`, {...payload})
