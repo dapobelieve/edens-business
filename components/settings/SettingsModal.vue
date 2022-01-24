@@ -17,7 +17,7 @@
             <hr>
             <template  v-if="menu === 1">
               <keep-alive>
-                <Notification :notification="user.user_settings" />
+               <Notification :notification="user.user_settings" />
               </keep-alive>
             </template>
             <template v-else>

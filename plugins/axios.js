@@ -17,9 +17,8 @@ export default function(context) {
   context.$axios.onError(error => {
     if(error.response ) {
       if(error.response.status === 401) {
-        return {}
-        // Cookies.remove('x-access-token');
-        // context.redirect('/account/login')
+        Cookies.remove('x-access-token');
+        context.redirect('/account/login')
       }else if(error.response && error.response.status === 451) {
         if (process.client) {
           let toast = new bootstrap.Toast(document.getElementById('liveToast'), {
