@@ -4,8 +4,8 @@
     <p class="mt-1 mb-5 body-1 fw-normal text-black-50">Tell us about your organization</p>
     <form class="flex-grow-1">
       <div class="mb-4">
-        <input class="form-control" v-model="$v.form.organization_name.$model" placeholder="Business name">
-        <small class="fs-7 text-bad-red" v-if="$v.form.organization_name.$error">{{nameErr}}</small>
+        <input class="form-control" v-model="$v.form.name.$model" placeholder="Business name">
+        <small class="fs-7 text-bad-red" v-if="$v.form.name.$error">{{nameErr}}</small>
       </div>
       <div class="mb-5">
         <input class="form-control" v-model="$v.form.email.$model" placeholder="Business email address">
@@ -41,9 +41,9 @@ export default {
       ],
       organization: null,
       form: {
-        organization_industry: "tech",
+        industry: "tech",
         email: null,
-        organization_name: null,
+        name: null,
       },
     }
   },
@@ -58,7 +58,7 @@ export default {
     organization: { required },
     form: {
       email: { required, email},
-      organization_name: { required },
+      name: { required },
     }
   },
   computed: {
@@ -70,7 +70,7 @@ export default {
       if (!this.$v.form.email.email) return "Invalid email address format";
     },
     nameErr() {
-      if (!this.$v.form.organization_name.required) return "Organization name is required";
+      if (!this.$v.form.name.required) return "Organization name is required";
     },
   },
   methods: {
@@ -81,14 +81,14 @@ export default {
       }
     }
   },
-  async created() {
-    try {
-      let res = await this.$store.dispatch('auth/organizations')
-      console.log('wawu')
-    }catch(e) {
+  // async created() {
+  //   try {
+  //     let res = await this.$store.dispatch('auth/organizations')
+  //     console.log('wawu')
+  //   }catch(e) {
 
-    }
-  }
+  //   }
+  // }
 }
 </script>
 

@@ -3,10 +3,6 @@ import Cookies from "js-cookie"
 export const state = () => ({
   token:null,
   user: {
-    "first_name": "Dapo",
-    "last_name": "Believe",
-    "email": "ddemodata@gmail.com",
-    "phone_number": "00000000000",
     user_settings: {
       push_notification: false,
       sms_notification: true,
@@ -35,14 +31,14 @@ export const mutations = {
 }
 export const actions = {
   async register({commit, state}, payload) {
-    let res = await this.$axios.$post('auth/signup', {organization_id:1, ...payload})
+    let res = await this.$axios.$post('auth/business', {...payload})
     const {token} = res
     Cookies.set('x-access-token', token.token)
     return res
   },
   async login({commit,state}, payload) {
-    let res = { user: null, token: null};
-    // let res = await this.$axios.$post('auth/login', {...payload})
+    // let res = { user: null, token: null};
+    let res = await this.$axios.$post('auth/login', {as:"Business", ...payload})
     const {token, user} = res
     Cookies.set('x-access-token', 'token.token')
     commit("setAuthUser", { ...user, user_settings: { push_notification: false,

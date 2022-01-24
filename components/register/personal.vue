@@ -4,22 +4,22 @@
     <p class="mt-1 mb-5">Tell us a little about yourself.</p>
     <form>
       <div class="mb-4">
-        <label class="eden-text-input" :class="[$v.form.first_name.$error ? 'eden-text-input-error': '']">
-          <input v-model="$v.form.first_name.$model" class="form-control" placeholder="First name">
-          <span v-if="$v.form.first_name.$error" class="ed-x"></span>
+        <label class="eden-text-input" :class="[$v.form.owner_first_name.$error ? 'eden-text-input-error': '']">
+          <input v-model="$v.form.owner_first_name.$model" class="form-control" placeholder="First name">
+          <span v-if="$v.form.owner_first_name.$error" class="ed-x"></span>
         </label>
-        <small class="fs-7 text-bad-red" v-if="$v.form.first_name.$error">{{fnameErr}}</small>
+        <small class="fs-7 text-bad-red" v-if="$v.form.owner_first_name.$error">{{fnameErr}}</small>
       </div>
       <div class="mb-4">
-        <label class="eden-text-input" :class="[$v.form.last_name.$error ? 'eden-text-input-error': '']">
-          <input v-model="$v.form.last_name.$model" class="form-control" placeholder="Last name">
-          <span v-if="$v.form.last_name.$error" class="ed-x"></span>
+        <label class="eden-text-input" :class="[$v.form.owner_last_name.$error ? 'eden-text-input-error': '']">
+          <input v-model="$v.form.owner_last_name.$model" class="form-control" placeholder="Last name">
+          <span v-if="$v.form.owner_last_name.$error" class="ed-x"></span>
         </label>
-        <small class="fs-7 text-bad-red" v-if="$v.form.last_name.$error">{{lnameErr}}</small>
+        <small class="fs-7 text-bad-red" v-if="$v.form.owner_last_name.$error">{{lnameErr}}</small>
       </div>
       <div class="mb-5">
-        <DatepickerComponent v-model="$v.form.date_of_birth.$model" />
-        <small class="fs-7 text-bad-red" v-if="$v.form.date_of_birth.$error">{{dateErr}}</small>
+        <DatepickerComponent v-model="$v.form.owner_date_of_birth.$model" />
+        <small class="fs-7 text-bad-red" v-if="$v.form.owner_date_of_birth.$error">{{dateErr}}</small>
       </div>
       <div class="mb-4">
         <label class="eden-text-input" :class="[$v.form.role.$error ? 'eden-text-input-error': '']">
@@ -47,9 +47,9 @@ export default {
   data () {
     return {
       form: {
-        first_name: null,
-        last_name: null,
-        date_of_birth: null,
+        owner_first_name: null,
+        owner_last_name: null,
+        owner_date_of_birth: null,
         role: null
       }
     }
@@ -64,26 +64,26 @@ export default {
   },
   validations: {
     form: {
-      first_name:{ required, alpha},
-      last_name:{ required, alpha},
+      owner_first_name:{ required, alpha},
+      owner_last_name:{ required, alpha},
       role:{ required },
-      date_of_birth:{ required },
+      owner_date_of_birth:{ required },
     }
   },
   computed: {
     fnameErr() {
-      if (!this.$v.form.first_name.required) return "First name is required";
-      if (!this.$v.form.first_name.alpha) return "First name should contain alphabets";
+      if (!this.$v.form.owner_first_name.required) return "First name is required";
+      if (!this.$v.form.owner_first_name.alpha) return "First name should contain alphabets";
     },
     lnameErr() {
-      if (!this.$v.form.last_name.required) return "Last name is required";
-      if (!this.$v.form.last_name.alpha) return "Last name should contain alphabets";
+      if (!this.$v.form.owner_last_name.required) return "Last name is required";
+      if (!this.$v.form.owner_last_name.alpha) return "Last name should contain alphabets";
     },
     roleErr() {
       if (!this.$v.form.role.required) return "Please enter your role in the organization";
     },
     dateErr() {
-      if (!this.$v.form.date_of_birth.required) return "Select your date of birth";
+      if (!this.$v.form.owner_date_of_birth.required) return "Select your date of birth";
     },
   }
 }
