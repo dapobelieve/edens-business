@@ -1,36 +1,7 @@
 import Vue from "vue"
 export const state = () => ({
-  balance: 43233923,
-  transactions: [
-    {
-      type: 'Credit',
-      category: 'funds',
-      amount: 400000,
-      created_at: Date.now(),
-      status: 'Success'
-    },
-    {
-      type: 'Credit',
-      category: 'groceries',
-      amount: 10000,
-      created_at: Date.now(),
-      status: 'Success'
-    },
-    {
-      type: 'Debit',
-      category: 'school fees',
-      amount: 230000,
-      created_at: Date.now(),
-      status: 'Success'
-    },
-    {
-      type: 'Debit',
-      category: 'airtime',
-      amount: 3000,
-      created_at: Date.now(),
-      status: 'Success'
-    }
-  ],
+  balance: 0,
+  transactions: [],
 })
 
 export const mutations = {
@@ -49,6 +20,10 @@ export const actions = {
     }
     return res
   },
+  async internalTransfer({dispatch, commit}, payload) {
+    let res = await this.$axios.$post('/transfer/internal', {...payload})
+    return res
+  },
   async changePin() {
     //
   },
@@ -57,7 +32,7 @@ export const actions = {
   },
   async getWallet({commit}) {
     let res = await this.$axios.$get('/wallet')
-    commit("setStates", {balance: res.wallet.balance})
+    commit("setStates", {account: res.account, balance: res.account.balance, transactions: res.transactions, number: res.account.account_number})
   },
   async getTransactions({commit}) {
     let res = await this.$axios.$get('/transactions')
@@ -77,5 +52,7 @@ export const actions = {
 
 export const getters = {
   walletBalance: state => state.balance,
-  walletTrxn: state => state.transactions
+  walletTrxn: state => state.transactions,
+  walletNumber: state => state.number
+
 }
