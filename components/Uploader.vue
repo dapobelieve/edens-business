@@ -68,6 +68,7 @@ export default {
       if(!queued) {
         try {
           await this.startUpload()
+          this.$emit('completed')
         }catch (e) {
           if (this.$axios.isCancel(e)) {
             console.log("Upload cancelled by user")
@@ -97,7 +98,6 @@ export default {
         return (this.fileObj.file.size / 1000000).toFixed(2);
       }
     },
-
     progressUse() {
       if(this.outerProgress){
         this.out_progress = this.outerProgress
@@ -108,28 +108,28 @@ export default {
   methods: {
     async handleFile(e) {
       this.fileObj = {file: e.target.files[0], name: this.fileType, progress: 0}
-        if((this.fileObj.file.size/1024/1024) > 2) {
-          this.error.text = "File too large"
-          this.error.state = true
-          this.disableUpload = true
-          this.uploadComplete = false;
-          // this.$emit('upload-complete')
-        }else {
-          this.$emit('upload-complete')
-          this.$emit('receive-file', this.fileObj.file, this.fileType)
-          this.uploadComplete = true;
-          this.disableUpload = true;
-        }
+      if((this.fileObj.file.size/1024/1024) > 2) {
+        this.error.text = "File too large"
+        this.error.state = true
+        this.disableUpload = true
+        this.uploadComplete = false;
+      }else {
+        // this.$emit('upload-complete', this.fileObj.file)
+        this.$emit('file-selected', this.fileObj.file)
+        this.$emit('receive-file', this.fileObj.file, this.fileType)
+        this.uploadComplete = true;
+        this.disableUpload = true;
+      }
     },
     async startUpload() {
       this.$emit("uploading")
-       return await this.$axios.$post('/file/upload', this.makeFormData(), {
-          onUploadProgress: (e) => {
-            this.fileObj.progress = Math.round((e.loaded * 100) / e.total)
-          },
-          cancelToken: this.source.token
-        })
-      },
+      return await this.$axios.$post('/file/upload', this.makeFormData(), {
+        onUploadProgress: (e) => {
+          this.fileObj.progress = Math.round((e.loaded * 100) / e.total)
+        },
+        cancelToken: this.source.token
+      })
+    },
     removeFile() {
       this.source.cancel();
       this.source = this.$axios.CancelToken.source();
@@ -143,6 +143,8 @@ export default {
       this.$emit('file-removed');
     },
     makeFormData() {
+      console.log(this.fileObj)
+      console.log(this.fileType)
       const form = new FormData();
       form.append('file_type', `${this.fileType}`)
       form.append('file', this.fileObj.file)

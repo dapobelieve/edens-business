@@ -71,6 +71,7 @@ export default {
   components:{Summary, ConfirmPayment},
   data() {
     return {
+      search:null,
       providerName:null,
       currentPage:'select-provider'
     }
