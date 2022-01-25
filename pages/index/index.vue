@@ -13,7 +13,7 @@
             <div class="ms-auto d-flex d-xl-block">
               <button data-bs-toggle="modal" data-bs-target="#fund-wallet" class="btn btn-sm btn-jungle-green me-xl-3 me-1 px-3">
                 <span class="ed-plus text-eden-mint fw-bold fs-6"></span>Fund Wallet</button>
-              <button data-bs-toggle="modal" data-bs-target="#withdraw-wallet" class="px-3 me-2 btn text-black btn-sm btn-outline-eden-mint">
+              <button data-bs-toggle="modal" @click="sendMoney" class="px-3 me-2 btn text-black btn-sm btn-outline-eden-mint">
                 Send Money
               </button>
               <button data-bs-toggle="modal" data-bs-target="#request-money-modal" class="px-3 text-black btn btn-sm btn-outline-eden-mint">
@@ -23,9 +23,10 @@
           </div>
         </div>
 <!--        tier  section -->
-        <div class="d-flex justify-content-between line mb-6 px-4 py-5" style="background: rgba(239, 74, 84, 0.03)">
-          <UpgradeCard />
+        <div v-if="!tierStatus" class="d-flex justify-content-between line mb-6 px-4 py-5" style="background: rgba(239, 74, 84, 0.03)">
+          <UpgradeCard  />
         </div>
+        <Pending v-else />
 <!--        recent transactions-->
         <div class="d-none d-xl-block">
           <div class="d-flex mb-4 px-4">
@@ -96,8 +97,10 @@ import PulseComponent from '~/components/PulseComponent'
 import UpgradeModal from '~/components/wallet/upgrade/UpgradeModal'
 import RequestMoneyModal from '~/components/wallet/request-money/RequestMoneyModal'
 import UpgradeCard from '~/components/business/UpgradeCard'
+import Pending from '~/components/wallet/upgrade/Pending'
   export default {
-  components: { UpgradeCard,
+  components: {
+    Pending, UpgradeCard,
     RequestMoneyModal,
     UpgradeModal,
     PulseComponent,
@@ -135,8 +138,24 @@ import UpgradeCard from '~/components/business/UpgradeCard'
   },
   computed: {
     ...mapGetters({
-      walletBalance: "wallet/walletBalance"
+      walletBalance: "wallet/walletBalance",
+      getTier: "auth/getTierLevel",
+      account: "wallet/getAccount"
     }),
+    tierStatus () {
+      return this.account?.tier_upgrade_request_status === 'ACTIVE'
+    }
+  },
+  methods: {
+    sendMoney() {
+      this.sendMoneyModal.show()
+      return
+      if(this.getTier.name === "TIER_0") {
+        this.upgradeModal.show()
+      }else {
+        this.sendMoneyModal.show()
+      }
+    }
   },
   async asyncData(ctx) {
    try {
@@ -162,9 +181,7 @@ import UpgradeCard from '~/components/business/UpgradeCard'
     this.fundWalletModal = new bootstrap.Modal(fundWallet);
     this.newCardModal = new bootstrap.Modal(_newCardModal);
     this.upgradeModal = new bootstrap.Modal(_upgradeModal);
-    this.requestMoneyModal = new bootstrap.Modal(_upgradeModal);
-    // this.upgradeModal.show();
-
+    this.requestMoneyModal = new bootstrap.Modal(_requestMoney);
     // const { card } = await this.$store.dispatch('wallet/getCard');
     this.card = {pin: 1234,exp: '12/22',cvv: '323', card_number: '5555 5555 5555 4444'}
     // this.card = card

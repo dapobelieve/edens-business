@@ -52,7 +52,7 @@
                   <label for="fname" class="col-form-label body-1">First name</label>
                 </div>
                 <div class="col">
-                  <input type="text" v-model="form.first_name" id="fname" class="form-control" aria-describedby="passwordHelpInline">
+                  <input type="text" disabled v-model="form.first_name" id="fname" class="form-control" aria-describedby="passwordHelpInline">
                 </div>
               </div>
               <div class="row mb-4">
@@ -60,7 +60,7 @@
                   <label for="lname" class="col-form-label body-1">Last name</label>
                 </div>
                 <div class="col">
-                  <input type="text" v-model="form.last_name" id="lname" class="form-control" aria-describedby="passwordHelpInline">
+                  <input type="text" disabled v-model="form.last_name" id="lname" class="form-control" aria-describedby="passwordHelpInline">
                 </div>
               </div>
               <div class="row mb-4">
@@ -68,7 +68,7 @@
                   <label for="email" class="col-form-label body-1">Email Address</label>
                 </div>
                 <div class="col">
-                  <input type="text" v-model="$v.form.email.$model" id="email" class="form-control" aria-describedby="">
+                  <input type="text" disabled v-model="$v.form.email.$model" id="email" class="form-control" aria-describedby="">
                   <small class="fs-8 text-bad-red" v-if="$v.form.email.$error">{{emailErr}}</small>
                 </div>
               </div>
@@ -77,7 +77,7 @@
                   <label for="dob" class="col-form-label body-1">Date of Birth</label>
                 </div>
                 <div class="col">
-                  <DatepickerComponent v-model="$v.form.date_of_birth.$model" />
+                  <DatepickerComponent disabled v-model="$v.form.date_of_birth.$model" />
                   <small class="fs-8 text-bad-red" v-if="$v.form.date_of_birth.$error">{{dateErr}}</small>
                 </div>
               </div>
@@ -87,20 +87,20 @@
                 </div>
                 <div class="col">
                   <label class="position-relative">
-                    <input style="padding-left: 46px" type="text" v-model="$v.form.phone_number.$model" id="phone" class="form-control" aria-describedby="passwordHelpInline">
+                    <input style="padding-left: 46px" type="text" v-model="$v.form.phone_number.$model" disabled id="phone" class="form-control" aria-describedby="passwordHelpInline">
                     <small style="top: 18px; left: 13px; font-size: 0.875rem; font-weight: 500" class="position-absolute">+231</small>
                   </label>
                   <small class="fs-8 text-bad-red" v-if="$v.form.phone_number.$error">{{phoneErr}}</small>
                 </div>
               </div>
-              <div class="row mb-4">
-                <div class="col-auto">
-                  <label for="org" class="col-form-label body-1">Employer</label>
-                </div>
-                <div class="col" v-if="form.organization">
-                  <input type="text" disabled :value="form.organization.name" id="org" class="form-control" aria-describedby="passwordHelpInline">
-                </div>
-              </div>
+<!--              <div class="row mb-4">-->
+<!--                <div class="col-auto">-->
+<!--                  <label for="org" class="col-form-label body-1">Employer</label>-->
+<!--                </div>-->
+<!--                <div class="col" v-if="form.organization">-->
+<!--                  <input type="text" disabled :value="form.organization.name" id="org" class="form-control" aria-describedby="passwordHelpInline">-->
+<!--                </div>-->
+<!--              </div>-->
             </div>
           </div>
         </div>

@@ -15,19 +15,26 @@
               <div>
                 <div class="mb-4">
 <!--                  <div class="mb-2"><span class="body-1 fw-bold">Upload a valid ID</span></div>-->
-                  <SelectComponent placeholder="Select ID" :options="options" v-model="option" />
-<!--                  <small class="fs-7 text-bad-red">some messages</small>-->
+                  <SelectComponent @input="selectHandler" placeholder="Select ID" :options="options" />
+<!--                  <small class="fs-7 text-bad-red">{{ idErr }}</small>-->
                 </div>
                 <div class="d-flex justify-content-between mb-3">
                   <span class="body-1 caption-2">Upload ID</span>
                   <span style="margin-right: 40px" class=" body-1 fw-normal text-black-50">PNG, JPEG, PDF</span>
                 </div>
-                <Uploader :queued="queued" @file-removed="uploadCount-=1" @upload-complete="uploadCount+=1" class="mb-5" file-type="valid_id" />
+                <Uploader
+                  @file-selected="identityFile=$event"
+                  :queued="queued"
+                  @file-removed="identityFile=null"
+                  @completed="submitForm"
+                  class="mb-5" :file-type="fileType"
+                />
               </div>
               <div>
                 <div class="mb-4">
                   <div class="mb-2"><span class="body-1 fw-bold">Enter NIM</span></div>
                   <input v-model="form.nim" placeholder="Enter NIM" type="text" class="form-control">
+                  <small class="fs-8 text-bad-red" v-if="$v.form.nim.$error">{{nimErr}}</small>
                 </div>
 <!--                <div class="d-flex justify-content-between mb-3">-->
 <!--                  <span class="body-1 caption-2">Proof of Address (Optional)</span>-->
@@ -39,75 +46,94 @@
           </div>
         </div>
         <div class="modal-footer">
-          <EdenButton @click="upload" :loading="btn.loading" :disabled="uploadCount !== 1 && !form.nim" class="btn btn-jungle-green btn-sm">Proceed</EdenButton>
+          <EdenButton @click="submit" :loading="btn.loading" :disabled="!identityFile" class="btn btn-jungle-green btn-sm">Proceed</EdenButton>
         </div>
       </div>
 </template>
 
 <script>
 import Uploader from "~/components/Uploader";
+import { required, numeric } from "vuelidate/lib/validators";
 export default {
   data() {
     return {
-      option: null,
+      fileType: null,
       form: {
         nim: null
       },
+      identityFile: null,
       options: [
         {
-          name: 'NIN',
-          value: 'nin'
+          name: 'National ID',
+          value: 'national_identity_card'
         },
         {
-          name: 'National ID',
-          value: 'national'
+          name: `Driver's Licence`,
+          value: 'national_identity_card'
         },
         {
           name: 'International Passport',
-          value: 'ip'
+          value: 'national_identity_card'
         }
       ],
       uploadCount: 0,
       queued: true,
+
       btn: {
         loading: false
       }
     }
   },
+  validations: {
+    form: {
+      nim: { required, numeric }
+    }
+  },
   methods: {
-    upload() {
-      this.btn.loading = !this.btn.loading;
-      setTimeout(() => {
-        this.btn.loading = !this.btn.loading;
-        this.$emit('proceed')
-      }, 5000)
-      // let toast = new bootstrap.Toast(document.getElementById('liveToast'), {
-      //   delay: 7000,
-      //   animation: true,
-      // })
-      // this.$store.commit('auth/setStates', {toast: {show: true,
-      //     data: {
-      //       header: 'Submitted successfully',
-      //       body: 'Your information has been submitted for review. We would get back to you in the next 48hours'
-      //     }}})
-      // toast.show()
-      // this.close()
+    selectHandler(data) {
+      this.fileType = data.value
+    },
+    submit() {
+      this.$v.form.nim.$touch()
+      if (!this.$v.$invalid) {
+        this.queued = false
+      }
+    },
+    async submitForm() {
+      try {
+        await this.$store.dispatch("auth/tireUpgrade", {
+          nim: this.form.nim
+        })
+        await this.$store.dispatch("wallet/getWallet")
 
-      // if(!this.queued) {
-      //   this.close();
-      //   return
-      // }
-      // this.queued = false
+        let toast = new bootstrap.Toast(document.getElementById('liveToast'), {
+          delay: 7000,
+          animation: true,
+        })
+
+        this.$store.commit('auth/setStates', {toast: {show: true,
+            data: {
+              header: 'Submitted successfully',
+              body: 'Your information has been submitted for review. We would get back to you in the next 48hours'
+            }}})
+        toast.show()
+        this.close()
+      }catch (e) {
+
+      }
     },
     close() {
       let modal = bootstrap.Modal.getInstance(document.getElementById('upgrade-modal'))
       modal.hide()
     },
   },
-  mounted() {
-    // this.upload()
-  },
-  components: { Uploader }
+  components: { Uploader },
+  computed: {
+    nimErr() {
+      if (!this.$v.form.nim.required) return "Enter an nim number";
+      if (!this.$v.form.nim.numeric) return "Only numbers allowed";
+    },
+  }
 }
 </script>
 
