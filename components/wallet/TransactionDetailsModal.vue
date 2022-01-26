@@ -12,7 +12,7 @@
           <div class="px-3" style="height: 25rem">
             <div class="d-flex justify-content-between mb-5">
               <small class="text-black-50">TYPE</small>
-              <span class="body-1 text-jungle-green">{{record.type}}</span>
+              <span class="body-1 text-jungle-green">{{record.action}}</span>
             </div>
             <div class="d-flex justify-content-between mb-5">
               <small class="text-black-50">CATEGORY</small>

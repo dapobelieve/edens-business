@@ -9,10 +9,10 @@
     <div class="modal-body">
       <div class="px-2 my-3 d-flex mb-6" style="">
         <div class="pin-container d-flex justify-content-around w-100">
-          <div><input v-model="form.pin1" autofocus ref="pin" type="number" min="0" max="9" required class="form-control pin-box" placeholder="0"></div>
-          <div><input v-model="form.pin2" ref="pin" type="number" min="0" max="9" required class="form-control pin-box" placeholder="0"></div>
-          <div><input v-model="form.pin3" ref="pin" type="number" min="0" max="9" required class="form-control pin-box" placeholder="0"></div>
-          <div><input v-model="form.pin4" ref="pin" type="number" min="0" max="9" required class="form-control pin-box" placeholder="0"></div>
+          <div><input v-model="form.pin1" autofocus ref="pin" type="password" min="0" max="9" required class="form-control pin-box" placeholder="0"></div>
+          <div><input v-model="form.pin2" ref="pin" type="password" min="0" max="9" required class="form-control pin-box" placeholder="0"></div>
+          <div><input v-model="form.pin3" ref="pin" type="password" min="0" max="9" required class="form-control pin-box" placeholder="0"></div>
+          <div><input v-model="form.pin4" ref="pin" type="password" min="0" max="9" required class="form-control pin-box" placeholder="0"></div>
         </div>
       </div>
     </div>

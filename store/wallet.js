@@ -33,7 +33,6 @@ export const actions = {
   async getWallet({commit}) {
     let res = await this.$axios.$get('/wallet')
     commit("setStates", {account: res.account, balance: res.account.balance, transactions: res.transactions, number: res.account.account_number})
-    commit("setStates", { account: res.account })
   },
   async getTransactions({commit}) {
     let res = await this.$axios.$get('/transactions')
