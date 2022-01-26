@@ -19,11 +19,11 @@
           <div class="border bank-details" style="border-radius: 16px">
             <div class="d-flex justify-content-between px-4 py-4">
               <p class="mb-0 caption text-black-50">ACCOUNT NO</p>
-              <p class="mb-0 body-1 caption-2">359 4506 056</p>
+              <p class="mb-0 body-1 caption-2">{{account.account_number}}</p>
             </div>
             <div class="d-flex justify-content-between px-4 py-4">
               <p class="mb-0 caption text-black-50">ACCOUNT NAME</p>
-              <p class="mb-0 body-1 caption-2">Jessica Brownley</p>
+              <p class="mb-0 body-1 caption-2">{{ account.name }}</p>
             </div>
             <div class="d-flex justify-content-between px-4 py-4">
               <p class="mb-0 caption text-black-50">BANK</p>
@@ -41,6 +41,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   data (){
     return {
@@ -48,6 +50,11 @@ export default {
         method: null
       }
     }
+  },
+  computed: {
+    ...mapGetters({
+      account: "wallet/getAccount"
+    })
   }
 }
 </script>

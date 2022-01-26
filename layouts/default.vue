@@ -79,7 +79,7 @@ export default {
         },
         {
           name: 'Branches',
-          iconClass: 'ed-notification',
+          iconClass: 'ed-branch',
           path: '/branches'
         },
         {
@@ -87,11 +87,11 @@ export default {
           iconClass: 'ed-notification',
           path: '/notification'
         },
-        {
-          name: 'Branches',
-          iconClass: 'ed-branch',
-          path: '/branches'
-        },
+        // {
+        //   name: 'Branches',
+        //   iconClass: 'ed-branch',
+        //   path: '/branches'
+        // },
 
         // {
         //   name: 'Stakeholder',

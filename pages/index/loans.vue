@@ -82,7 +82,11 @@ export default {
   },
   async beforeMount() {
     this.user = Object.assign({}, this.$store.state.auth.user)
-    this.loansObj = await this.$store.dispatch('loan/getAllLoans')
+    try {
+      this.loansObj = await this.$store.dispatch('loan/getAllLoans')
+    }catch (e) {
+      console.log(e)
+    }
   }
 }
 </script>

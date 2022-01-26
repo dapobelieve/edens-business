@@ -1,13 +1,17 @@
 <template>
   <div>
-    <date-picker :value="value" @input="$emit('input', $event)" name="uniquename" placeholder="Date of Birth (DD-MM-YY)"></date-picker>
+    <date-picker :disabled="disabled" :value="value" @input="$emit('input', $event)" name="uniquename" placeholder="Date of Birth (DD-MM-YY)"></date-picker>
   </div>
 </template>
 
 <script>
 export default {
   props:{
-    value: null
+    value: null,
+    disabled: {
+      type: Boolean,
+      default: false
+    }
   }
 }
 </script>

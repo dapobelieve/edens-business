@@ -1,6 +1,7 @@
 import Vue from "vue"
 export const state = () => ({
   balance: 0,
+  account: {},
   transactions: [],
 })
 
@@ -21,8 +22,7 @@ export const actions = {
     return res
   },
   async internalTransfer({dispatch, commit}, payload) {
-    let res = await this.$axios.$post('/transfer/internal', {...payload})
-    return res
+    return await this.$axios.$post('/transfer/internal', {...payload})
   },
   async changePin() {
     //
@@ -53,6 +53,6 @@ export const actions = {
 export const getters = {
   walletBalance: state => state.balance,
   walletTrxn: state => state.transactions,
-  walletNumber: state => state.number
-
+  walletNumber: state => state.number,
+  getAccount: state => state.account
 }
