@@ -29,10 +29,10 @@
       <tbody>
       <tr class="cursor-pointer text-black fw-bolder" @click="showDetails(data)" v-for="(data, dataIndex) in filteredRecords.slice(0, 9)" :key="dataIndex">
         <td>
-          <span :class="[data.type === 'Credit' ? 'bg-good-green' : 'bg-bad-red']" class="fw-bold rounded d-inline-flex justify-content-center align-items-center text-white" style="height: 10px; width: 10px" >
-            <span class="fs-8" :class="[data.type === 'Credit' ? 'ed-plus' : 'ed-minus']"></span>
+          <span :class="[data.action === 'Credit' ? 'bg-good-green' : 'bg-bad-red']" class="fw-bold rounded d-inline-flex justify-content-center align-items-center text-white" style="height: 10px; width: 10px" >
+            <span class="fs-8" :class="[data.action === 'Credit' ? 'ed-plus' : 'ed-minus']"></span>
           </span>
-          {{data.type}}</td>
+          {{data.action}}</td>
         <td>{{data.category}}</td>
         <td>{{data.amount | currency}}</td>
         <td v-if="data && data.created_at">{{dated(data.created_at)}}</td>
