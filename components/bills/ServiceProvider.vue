@@ -8,7 +8,7 @@
             <span class="ed-x fs-5"></span>
           </a>
         </div>
-        <div class="modal-body px-4" style="height: 26rem">
+        <div class="modal-body px-4" >
             <div>
               <div class="d-flex justify-content-between mb-3">
                 <span class="body-1 caption-2">Select service a provider</span>
@@ -79,7 +79,7 @@
 
     </div>
     <Summary v-else-if="currentPage === 'summary'" :bill="billType" :provider="providerDetails" @confirm-payment="form =  {...form, ...$event}; currentPage='confirm'" @back="back" />
-    <ConfirmPayment v-else @back="back" @make-payment="makePayment" :info="{...form}"  />
+    <ConfirmPayment v-else @back="back" @make-payment="makePayment" :info="{...form}" :loading="loading"  />
   </div>
 </template>
 
@@ -94,7 +94,8 @@ export default {
       search:null,
       providerDetails:null,
       currentPage:'select-provider',
-      form:{}
+      form:{},
+      loading: false
     }
   },
   props:{
@@ -117,6 +118,7 @@ export default {
         }
     },
     async makePayment(){
+      this.loading = true
       try {
           let res = await this.$axios.$post('bills/pay', {
             ...this.form,
@@ -130,7 +132,7 @@ export default {
           this.$store.commit('auth/setStates', {toast: {show: true,
               data: {
                 header: 'Payment sucessful!',
-                body: `Your payment to Liberia water corp was successful`
+                body: `Your bill payment was successfull`
               }}})
           toast.show()
         }catch (e) {
@@ -145,8 +147,11 @@ export default {
               }}})
           toast.show()
           this.error = e.message
-        }        
+        }   
+        finally {
+        this.loading= false;
         this.close()
+      }     
     },
     close(){
       let modal = bootstrap.Modal.getInstance(document.getElementById('provider-modal'))

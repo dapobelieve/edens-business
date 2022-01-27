@@ -9,14 +9,14 @@
             </div>
             <div class="modal-body" style="height: 10rem">
                 <div class="flex-grow-1 px-2">
-                    <small class="text-black-50">Please confirm you want to pay <span class="text-jungle-green fw-bold">{{info.amount}}</span> to  <span class="text-jungle-green fw-bold">Liberia water corparation  (0123464770)</span></small>
+                    <small class="text-black-50">Please confirm you want to pay <span class="text-jungle-green fw-bold">+234{{info.amount}}</span> to  <span class="text-jungle-green fw-bold">{{info.phone_number}}</span></small>
                 </div>
 
             </div>
             <div class="modal-footer ms-0 px-4 justify-content-between mb-3">
                 <button @click="$emit('back')" type="button" class="btn btn-sm btn-outline-eden-mint text-eden-green">
                     <span class="ed-arrow-left text-eden-mint "></span>Change</button>
-                <eden-button @click="$emit('make-payment')" type="button" class="btn btn-sm btn-jungle-green px-5">
+                <eden-button @click="$emit('make-payment')" :loading="loading" :disabled="loading" type="button" class="btn btn-sm btn-jungle-green px-5">
                     Pay now
                 </eden-button>
             </div>
@@ -27,7 +27,7 @@
 <script>
 
 export default {
-  props:['info'],
+  props:['info', 'loading'],
   methods:{
     // approve() {
     //   if(this.salary){

@@ -88,7 +88,7 @@ export default {
           try{
             let res = await this.$axios.$get (`bills/providers/${data.id}`)
             if(res.code === 200){
-              this.providerDetails = res.providers; 
+              this.providerDetails = res.billsproviders; 
             }
           }catch(e){
             this.providerDetails = null; 

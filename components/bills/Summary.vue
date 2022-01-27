@@ -23,13 +23,27 @@
                 </div>
             </div>
             <div>
-                <form class="search position-relative">
-                  <span class="body-1 caption-2">Confirm amount</span>
+                <form class="flex-grow-1">
+                  
+                <div class="position-relative mb-4">
+                  <span class="body-1 caption-2">Phone number</span>
+                  <label class="eden-text-input" :class="[$v.form.phone_number.$error ? 'eden-text-input-error': '']">
+                    <input style="padding-left: 46px" class="form-control" v-model="$v.form.phone_number.$model" />
+                    <span v-if="$v.form.phone_number.$error" class="ed-x"></span>
+                    <small style="top: 18px; left: 13px; font-size: 0.875rem; font-weight: 500" class="position-absolute">+231</small>
+                  </label>
+                  <small class="fs-7 text-bad-red" v-if="$v.form.phone_number.$error">{{phoneErr}}</small>
+                 </div> 
+
+                <div class="position-relative">
+                  <span class="body-1 caption-2 mt-2">Confirm amount</span>
                   <label class="eden-text-input" :class="$v.form.amount.$error ? 'eden-text-input-error': ''">
                     <input v-model="$v.form.amount.$model" class="form-control mt-2" placeholder="Amount">
                     <span v-if="$v.form.amount.$error" class="ed-x"></span>
                   </label>
                   <small class="fs-8 text-bad-red" v-if="$v.form.amount.$error">{{amountErrs}}</small>
+                </div>
+                  
                 </form>
             </div>
 
@@ -44,7 +58,7 @@
             <!-- <button @click="$emit('close-loan')" type="button" class="btn btn-sm btn-outline-eden-mint text-eden-green">/ -->
             <button @click="$emit('back')" type="button" class="btn btn-sm btn-outline-eden-mint text-eden-green">
                 <span class="ed-arrow-left text-eden-mint "></span>Back</button>
-            <eden-button @click="next" :loading="loading" :disabled="loading" type="button" class="btn btn-sm btn-jungle-green px-5">
+            <eden-button @click="next" type="button" class="btn btn-sm btn-jungle-green px-5">
                 Pay now
             </eden-button>
         </div>
@@ -60,6 +74,7 @@ export default {
     return {
       form:{
         amount:'',
+        phone_number:'',
         bill_id: this.bill.id,
         bill_provider_id: this.provider.id
       },
@@ -67,22 +82,26 @@ export default {
       isInputActive: false,
       error:false,
       salaryErr:'Enter an amount',
-      loading: false
     }
   },
   props:{
     provider: Object,
-    bill: Object
+    bill: Object,
   },
   validations: {
     form: {
       amount:{ required, numeric },
+      phone_number: { required, numeric }
     }
   },
   computed:  {
     amountErrs() {
       if (!this.$v.form.amount.required) return "Please enter an amount"
       if (!this.$v.form.amount.numeric) return "Only numbers allowed"
+    },
+    phoneErr() {
+      if (!this.$v.form.phone_number.required) return "Phone number is required";
+      if (!this.$v.form.phone_number.numeric) return "Phone number should only contain numbers";
     }
   },
   methods:{
