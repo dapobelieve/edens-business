@@ -9,7 +9,7 @@
             </div>
             <div class="modal-body" style="height: 10rem">
                 <div class="flex-grow-1 px-2">
-                    <small class="text-black-50">Please confirm you want to pay <span class="text-jungle-green fw-bold">$200.00</span> to  <span class="text-jungle-green fw-bold">Liberia water corparation  (0123464770)</span></small>
+                    <small class="text-black-50">Please confirm you want to pay <span class="text-jungle-green fw-bold">{{info.amount}}</span> to  <span class="text-jungle-green fw-bold">Liberia water corparation  (0123464770)</span></small>
                 </div>
 
             </div>
@@ -27,9 +27,7 @@
 <script>
 
 export default {
-  props:{
-    provider: String
-  },
+  props:['info'],
   methods:{
     // approve() {
     //   if(this.salary){

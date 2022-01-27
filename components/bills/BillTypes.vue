@@ -2,9 +2,9 @@
   <div>
     <div class="row gx-xl-6 " v-if="bills && bills.length > 0" >
       <div class="col-lg-4 mb-3 mb-xl-0" v-for="(data, dataIndex) in bills" :key="dataIndex">
-        <div class="fund-option px-4 mb-4 d-flex py-3 align-items-center cursor-pointer" @click="showModal('Electricity')">
+        <div class="fund-option px-4 mb-4 d-flex py-3 align-items-center cursor-pointer" @click="showModal(data)">
             <div class="rounded-circle flex-shrink-0 bg-mint-lighter d-inline-flex align-items-center me-4 justify-content-center">
-                <img src="~/assets/electricity.svg">
+                <img :src="require(`~/assets/${data.name.toLowerCase()}.svg`)">
             </div>
             <div class="min-64">
                 <p class="mb-0 fw-bolder">{{data.name}}</p>
@@ -12,7 +12,7 @@
             </div>
         </div>
       </div>
-      <div class="col-lg-4 col-xl-4 mb-3 mb-xl-0">
+      <!-- <div class="col-lg-4 col-xl-4 mb-3 mb-xl-0">
        <div class="fund-option px-4 mb-4 d-flex py-3 align-items-center cursor-pointer"  @click="showModal('Internet')">
             <div class="rounded-circle flex-shrink-0 bg-mint-lighter d-inline-flex align-items-center me-4 justify-content-center">
                 <img src="~/assets/internet.svg">
@@ -60,7 +60,7 @@
       </div> -->
     </div>
 
-    <ServiceProvider id="provider-modal" :billType="providerDetails" />
+    <ServiceProvider id="provider-modal" :billType="billDetails" :billProviders="providerDetails" />
   </div>
 </template>
 
@@ -78,12 +78,23 @@ export default {
     data(){
         return{
             providerModal: null,
-            providerDetails: null
+            providerDetails: null,
+            billDetails: null
         }
     },
     methods:{
-        showModal(data){
-        this.providerDetails = data;
+        async showModal(data){
+          this.billDetails = data
+          try{
+            let res = await this.$axios.$get (`bills/providers/${data.id}`)
+            if(res.code === 200){
+              this.providerDetails = res.providers; 
+            }
+          }catch(e){
+            this.providerDetails = null; 
+            this.error =  e.message
+            console.log(e.message)
+          }
         this.$nextTick(() => {
             this.providerModal.show()
          })

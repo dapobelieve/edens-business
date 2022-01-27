@@ -10,7 +10,7 @@
         <div class="modal-body px-4" style="height: 26rem">
             <div>
                 <div class="d-flex justify-content-between mb-3">
-                <span class="fs-16 fw-bolder">{{provider}}</span>
+                <span class="fs-16 fw-bolder">{{bill.name}}</span>
                 </div>
             </div>
 
@@ -19,13 +19,17 @@
                     <img src="~/assets/electricity.svg">
                 </div>
                 <div>
-                    <p class="mb-0 fw-bolder">Provider 1</p>
+                    <p class="mb-0 fw-bolder">{{provider.name}}</p>
                 </div>
             </div>
             <div>
                 <form class="search position-relative">
-                    <span class="body-1 caption-2">Confirm amount</span>
-                    <input name='search-records' type='search' autocomplete='randomstring' class="form-control mt-2" placeholder="$145.00" v-model="search">
+                  <span class="body-1 caption-2">Confirm amount</span>
+                  <label class="eden-text-input" :class="$v.form.amount.$error ? 'eden-text-input-error': ''">
+                    <input v-model="$v.form.amount.$model" class="form-control mt-2" placeholder="Amount">
+                    <span v-if="$v.form.amount.$error" class="ed-x"></span>
+                  </label>
+                  <small class="fs-8 text-bad-red" v-if="$v.form.amount.$error">{{amountErrs}}</small>
                 </form>
             </div>
 
@@ -40,7 +44,7 @@
             <!-- <button @click="$emit('close-loan')" type="button" class="btn btn-sm btn-outline-eden-mint text-eden-green">/ -->
             <button @click="$emit('back')" type="button" class="btn btn-sm btn-outline-eden-mint text-eden-green">
                 <span class="ed-arrow-left text-eden-mint "></span>Back</button>
-            <eden-button @click="$emit('confirm-payment')" :loading="loading" :disabled="loading" type="button" class="btn btn-sm btn-jungle-green px-5">
+            <eden-button @click="next" :loading="loading" :disabled="loading" type="button" class="btn btn-sm btn-jungle-green px-5">
                 Pay now
             </eden-button>
         </div>
@@ -49,11 +53,16 @@
 </template>
 
 <script>
+import { numeric, required } from 'vuelidate/lib/validators'
 
 export default {
   data() {
     return {
-      salary:'',
+      form:{
+        amount:'',
+        bill_id: this.bill.id,
+        bill_provider_id: this.provider.id
+      },
       currentPage:'select-provider',
       isInputActive: false,
       error:false,
@@ -62,22 +71,27 @@ export default {
     }
   },
   props:{
-    provider: String
+    provider: Object,
+    bill: Object
+  },
+  validations: {
+    form: {
+      amount:{ required, numeric },
+    }
+  },
+  computed:  {
+    amountErrs() {
+      if (!this.$v.form.amount.required) return "Please enter an amount"
+      if (!this.$v.form.amount.numeric) return "Only numbers allowed"
+    }
   },
   methods:{
-    // approve() {
-    //   if(this.salary){
-    //     this.error = false
-    //     this.currentPage = 'upload'
-    //   }else{
-    //     this.error = true
-    //   } 
-    // },
-    // close(){
-    //   let modal = bootstrap.Modal.getInstance(document.getElementById('employee-approval-modal'))
-    //   modal.hide()
-    //   this.currentPage='salary'
-    // },
+    async next() {
+      this.$v.$touch();
+      if (!this.$v.$invalid) {
+        this.$emit("confirm-payment", {...this.form})
+      }
+    }
   },
 }
 </script>

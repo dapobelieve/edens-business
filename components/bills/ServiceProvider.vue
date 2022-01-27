@@ -1,9 +1,9 @@
 <template>
     <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div v-if="currentPage === 'select-provider'" class="modal-dialog modal-dialog-centered" style="max-width: 477px">
-      <div class="modal-content" >
+      <div  v-if="billProviders && billProviders.length > 0"  class="modal-content" >
         <div class="modal-header px-4">
-          <h5 class="modal-title">{{billType}}</h5>
+          <h5 class="modal-title">{{billType.name}}</h5>
           <a type="button" class="ms-auto text-eden-mint d-inline-flex align-items-center justify-content-center rounded-circle" style="height: 32px; width: 32px; background: rgba(146, 204, 191, 0.1);" data-bs-dismiss="modal" aria-label="Close">
             <span class="ed-x fs-5"></span>
           </a>
@@ -22,16 +22,16 @@
                 </form>
             </div>
 
-            <div class="mt-4 fund-option px-4 mb-4 d-flex py-3 align-items-center cursor-pointer" @click="showSummary('Provider 1')">
+            <div v-for="(data, dataIndex) in billProviders" :key="dataIndex" class="mt-4 fund-option px-4 mb-4 d-flex py-3 align-items-center cursor-pointer" @click="showSummary(data)">
                 <div class="rounded-circle flex-shrink-0 bg-mint-lighter d-inline-flex align-items-center me-4 justify-content-center">
                     <img src="~/assets/electricity.svg">
                 </div>
                 <div>
-                    <p class="mb-0 fw-bolder">Provider 1</p>
+                    <p class="mb-0 fw-bolder">{{data.name}}</p>
                 </div>
             </div>
 
-            <div class="mt-4 fund-option px-4 mb-4 d-flex py-3 align-items-center cursor-pointer"  @click="showSummary('Provider 2')">
+            <!-- <div class="mt-4 fund-option px-4 mb-4 d-flex py-3 align-items-center cursor-pointer"  @click="showSummary('Provider 2')">
                 <div class="rounded-circle flex-shrink-0 bg-mint-lighter d-inline-flex align-items-center me-4 justify-content-center">
                     <img src="~/assets/electricity.svg">
                 </div>
@@ -47,7 +47,7 @@
                 <div>
                     <p class="mb-0 fw-bolder">Provider 3</p>
                 </div>
-            </div>
+            </div> -->
 
         </div>
         <div class="modal-footer ms-0 px-4 mb-3">
@@ -57,9 +57,29 @@
         </div>
       </div>
 
+      <div class="modal-content" v-else >
+        <div class="modal-header px-4" v-if="billType">
+          <h5 class="modal-title">{{billType.name}}</h5>
+          <a type="button" class="ms-auto text-eden-mint d-inline-flex align-items-center justify-content-center rounded-circle" style="height: 32px; width: 32px; background: rgba(146, 204, 191, 0.1);" data-bs-dismiss="modal" aria-label="Close">
+            <span class="ed-x fs-5"></span>
+          </a>
+        </div>
+        <div class="modal-body px-4" style="height: 16rem">
+          <div class="card border-0">
+            <div class="card-body d-flex flex-column" >
+              <img class="mb-3" style="height: 4.4rem" src="~/assets/images/nothing.svg">
+              <div class="text-center mb-5">
+                <h6 class="mb-3 ">Nothing to see here</h6>
+                <p class="text-black-50">No provider available</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
-    <Summary v-else-if="currentPage === 'summary'" :provider="providerName" @confirm-payment="confirm" @back="back" />
-    <ConfirmPayment v-else @back="back" @make-payment="makePayment" />
+    <Summary v-else-if="currentPage === 'summary'" :bill="billType" :provider="providerDetails" @confirm-payment="form =  {...form, ...$event}; currentPage='confirm'" @back="back" />
+    <ConfirmPayment v-else @back="back" @make-payment="makePayment" :info="{...form}"  />
   </div>
 </template>
 
@@ -72,17 +92,19 @@ export default {
   data() {
     return {
       search:null,
-      providerName:null,
-      currentPage:'select-provider'
+      providerDetails:null,
+      currentPage:'select-provider',
+      form:{}
     }
   },
   props:{
-    billType: String
+    billType: Object,
+    billProviders: Array
   },
   methods:{
     showSummary(data) {
         this.currentPage = 'summary'
-        this.providerName= data
+        this.providerDetails= data
     },
     confirm(){
         this.currentPage = 'confirm'
@@ -94,17 +116,36 @@ export default {
             this.currentPage = 'summary'
         }
     },
-    makePayment(){
-        let toast = new bootstrap.Toast(document.getElementById('liveToast'), {
+    async makePayment(){
+      try {
+          let res = await this.$axios.$post('bills/pay', {
+            ...this.form,
+            // bill_id: this.billType.id,
+            // bill_provider_id,
+          })
+          let toast = new bootstrap.Toast(document.getElementById('liveToast'), {
           delay: 7000,
           animation: true,
-        })
-        this.$store.commit('auth/setStates', {toast: {show: true,
-            data: {
-              header: 'Payment sucessful!',
-              body: `Your payment to Liberia water corp was successful`
-            }}})
-        toast.show()
+          })
+          this.$store.commit('auth/setStates', {toast: {show: true,
+              data: {
+                header: 'Payment sucessful!',
+                body: `Your payment to Liberia water corp was successful`
+              }}})
+          toast.show()
+        }catch (e) {
+          let toast = new bootstrap.Toast(document.getElementById('liveToast'), {
+          delay: 7000,
+          animation: true,
+          })
+          this.$store.commit('auth/setStates', {toast: {show: true,
+              data: {
+                header: 'Ooops!',
+                body: `${e.message}`
+              }}})
+          toast.show()
+          this.error = e.message
+        }        
         this.close()
     },
     close(){
