@@ -9,7 +9,7 @@
             </div>
             <div class="modal-body" style="height: 10rem">
                 <div class="flex-grow-1 px-2">
-                    <small class="text-black-50">Please confirm you want to pay <span class="text-jungle-green fw-bold">+234{{info.amount}}</span> to  <span class="text-jungle-green fw-bold">{{info.phone_number}}</span></small>
+                    <small class="text-black-50">Please confirm you want to pay <span class="text-jungle-green fw-bold">{{info.amount}}</span> to  <span class="text-jungle-green fw-bold">+231{{info.phone_number}}</span></small>
                 </div>
 
             </div>
