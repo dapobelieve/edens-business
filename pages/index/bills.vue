@@ -3,7 +3,7 @@
     <template>
       <div class="card">
         <div class="card-body" style="padding: 2.25rem; padding-top: 2.125rem; padding-bottom: 8.25rem">
-            <BillTypes />
+            <BillTypes :bills="bill" />
         </div>
       </div>
     </template>
@@ -39,10 +39,16 @@ export default {
   computed: {
     ...mapGetters({
       verified: 'auth/isVerified',
+      bill: 'bill/billList'
     })
   },
   async beforeMount() {
     this.user = Object.assign({}, this.$store.state.auth.user)
+    try {
+      await this.$store.dispatch('bill/getBills')
+    }catch (e) {
+      console.log(e)
+    }
   }
 }
 </script>
