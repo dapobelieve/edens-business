@@ -56,7 +56,6 @@ export const actions = {
     // dispatch('configurations');
   },
   async getTier({dispatch, commit}) {
-    console.log('getting tier')
     let res = await this.$axios.$get('/tier');
     commit('setStates', {tier: res.tier})
   },

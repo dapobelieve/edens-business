@@ -56,7 +56,6 @@
             </button>
         </div>
       </div>
-
       <div class="modal-content" v-else >
         <div class="modal-header px-4" v-if="billType">
           <h5 class="modal-title">{{billType.name}}</h5>
@@ -91,8 +90,8 @@ export default {
   components:{Summary, ConfirmPayment},
   data() {
     return {
-      search:null,
-      providerDetails:null,
+      search: null,
+      providerDetails: null,
       currentPage:'select-provider',
       form:{},
       loading: false
@@ -147,11 +146,11 @@ export default {
               }}})
           toast.show()
           this.error = e.message
-        }   
+        }
         finally {
         this.loading= false;
         this.close()
-      }     
+      }
     },
     close(){
       let modal = bootstrap.Modal.getInstance(document.getElementById('provider-modal'))
@@ -159,12 +158,21 @@ export default {
       this.currentPage='select-provider'
     },
   },
+  mounted() {
+    let modal = document.getElementById("provider-modal")
+    modal.addEventListener('hidden.bs.modal', () => {
+      this.currentPage = 'select-provider'
+    })
+
+    this.$once('hook:destroyed', () => {
+      window.removeEventListener('hidden.bs.modal', ()=> {})
+    })
+  }
 }
 </script>
 
 <style lang="scss" scoped>
 .search {
-    // width: 327px;
     input {
       height: 50px;
       font-weight: 400;

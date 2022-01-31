@@ -12,52 +12,6 @@
             </div>
         </div>
       </div>
-      <!-- <div class="col-lg-4 col-xl-4 mb-3 mb-xl-0">
-       <div class="fund-option px-4 mb-4 d-flex py-3 align-items-center cursor-pointer"  @click="showModal('Internet')">
-            <div class="rounded-circle flex-shrink-0 bg-mint-lighter d-inline-flex align-items-center me-4 justify-content-center">
-                <img src="~/assets/internet.svg">
-            </div>
-            <div class="min-64">
-                <p class="mb-0 fw-bolder">Internet</p>
-                <p class="mb-0 body-1 text-black-50 ">Pay and subscribe to countless internet providers.</p>
-            </div>
-        </div>
-      </div>
-      <div class="col-lg-4">
-        <div class="fund-option px-4 mb-4 d-flex py-3 align-items-center cursor-pointer"  @click="showModal('Cable Tv')">
-            <div class="rounded-circle flex-shrink-0 bg-mint-lighter d-inline-flex align-items-center me-4 justify-content-center">
-                <img src="~/assets/cable.svg">
-            </div>
-            <div class="min-64">
-                <p class="mb-0 fw-bolder">Cable TV</p>
-                <p class="mb-0 body-1 text-black-50 ">Pay and subscribe to countless Cable TV networks.</p>
-            </div>
-        </div>
-      </div>
-
-      <div class="col-lg-4">
-        <div class="fund-option px-4 mb-4 d-flex py-3 align-items-center cursor-pointer"  @click="showModal('Airtime')">
-            <div class="rounded-circle flex-shrink-0 bg-mint-lighter d-inline-flex align-items-center me-4 justify-content-center">
-                <img src="~/assets/phone.svg">
-            </div>
-            <div class="min-64">
-                <p class="mb-0 fw-bolder">Airtime</p>
-                <p class="mb-0 body-1 text-black-50">Pay for airtime.</p>
-            </div>
-        </div>
-      </div>
-
-      <div class="col-lg-4">
-        <div class="fund-option px-4 mb-4 d-flex py-3 align-items-center cursor-pointer"  @click="showModal('Water')">
-            <div class="rounded-circle flex-shrink-0 bg-mint-lighter d-inline-flex align-items-center me-4 justify-content-center">
-                 <img src="~/assets/water.svg">
-            </div>
-            <div class="min-64">
-                <p class="mb-0 fw-bolder">Water</p>
-                <p class="mb-0 body-1 text-black-50">Pay for water.</p>
-            </div>
-        </div>
-      </div> -->
     </div>
 
     <ServiceProvider id="provider-modal" :billType="billDetails" :billProviders="providerDetails" />
@@ -88,10 +42,10 @@ export default {
           try{
             let res = await this.$axios.$get (`bills/providers/${data.id}`)
             if(res.code === 200){
-              this.providerDetails = res.billsproviders; 
+              this.providerDetails = res.billsproviders;
             }
           }catch(e){
-            this.providerDetails = null; 
+            this.providerDetails = null;
             this.error =  e.message
             console.log(e.message)
           }

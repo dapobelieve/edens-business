@@ -7,10 +7,9 @@
         </div>
       </div>
     </template>
-
-    <div data-bs-toggle="modal" data-bs-target="#cannotRequestModal" class="d-xl-none request-loan position-fixed bg-jungle-green rounded-circle d-inline-flex align-items-center justify-content-center shadow-lg">
-      <span class="ed-plus text-eden-mint fs-1"></span>
-    </div>
+<!--    <div data-bs-toggle="modal" data-bs-target="#cannotRequestModal" class="d-xl-none request-loan position-fixed bg-jungle-green rounded-circle d-inline-flex align-items-center justify-content-center shadow-lg">-->
+<!--      <span class="ed-plus text-eden-mint fs-1"></span>-->
+<!--    </div>-->
   </div>
 </template>
 <script>
