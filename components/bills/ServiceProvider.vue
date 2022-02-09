@@ -31,24 +31,6 @@
                 </div>
             </div>
 
-            <!-- <div class="mt-4 fund-option px-4 mb-4 d-flex py-3 align-items-center cursor-pointer"  @click="showSummary('Provider 2')">
-                <div class="rounded-circle flex-shrink-0 bg-mint-lighter d-inline-flex align-items-center me-4 justify-content-center">
-                    <img src="~/assets/electricity.svg">
-                </div>
-                <div>
-                    <p class="mb-0 fw-bolder">Provider 2</p>
-                </div>
-            </div>
-
-            <div class="mt-4 fund-option px-4 mb-4 d-flex py-3 align-items-center cursor-pointer"  @click="showSummary('Provider 3')">
-                <div class="rounded-circle flex-shrink-0 bg-mint-lighter d-inline-flex align-items-center me-4 justify-content-center">
-                    <img src="~/assets/electricity.svg">
-                </div>
-                <div>
-                    <p class="mb-0 fw-bolder">Provider 3</p>
-                </div>
-            </div> -->
-
         </div>
         <div class="modal-footer ms-0 px-4 mb-3">
             <button type="button" class="btn btn-sm btn-jungle-green px-6">
@@ -118,8 +100,9 @@ export default {
     },
     async makePayment(){
       this.loading = true
+      let bill_id = this.billType ? this.billType.id : ''
       try {
-          let res = await this.$axios.$post('bills/pay', {
+          let res = await this.$axios.$post(`bills/pay/${bill_id}`, {
             ...this.form,
             // bill_id: this.billType.id,
             // bill_provider_id,

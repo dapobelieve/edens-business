@@ -75,7 +75,7 @@ export default {
       form:{
         amount:'',
         phone_number:'',
-        bill_id: this.bill.id,
+        // bill_id: this.bill.id,
         bill_provider_id: this.provider.id
       },
       currentPage:'select-provider',
