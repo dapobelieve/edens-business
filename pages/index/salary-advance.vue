@@ -44,18 +44,18 @@
 
               </tr>
               </thead>
-              <tbody >
-              <tr class="cursor-pointer">
+              <tbody  v-if="membersList && membersList.length > 0">
+              <tr v-for="(data, dataIndex) in filteredRecords" :key="dataIndex" class="cursor-pointer">
                 <td class="image-padding"><img class="avatar avatar-sm" src="https://res.cloudinary.com/rohing/image/upload/v1585572497/harley-davidson-1HZcJjdtc9g-unsplash_vwslej.jpg"></td>
-                <td class="additional-padding">Jessica Brownly</td>
-                <td class=" name-decoration">j.brownly@gmail.com</td>
-                <td>+33 956 340 4057</td>
-                <td>22/01/1984</td>
-                <td>PENDING</td>
+                <td class="additional-padding">{{data.first_name + ' ' + data.last_name}}</td>
+                <td class=" name-decoration">{{data.email}}</td>
+                <td>{{data.phone_number}}</td>
+                <td v-if="data && data.created_at">{{dated(data.created_at)}}</td> <td v-else>24/09/2010</td>
+                <td>Registered</td>
                 <td class="additional-padding">
                   <span  data-bs-display="static" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" class="dropdown-toggle ed-more-vertical icon-border fs-5 cursor-pointer"></span>
                   <ul @click.stop=""  class="employee-menu dropdown-menu py-0 border-0" aria-labelledby="dropdownMenuButton1">
-                    <li @click="showHRDetails('data')"><a class="dropdown-item py-3">
+                    <li @click="showHRDetails(data)"><a class="dropdown-item py-3">
                       <span class="ed-eye text-eden-mint me-3 fw-bold"></span>
                       <span class="body-1">View details</span>
                     </a></li>
@@ -72,35 +72,8 @@
                   </ul>
                 </td>
               </tr>
-              <tr class="cursor-pointer">
-                <td class="image-padding"><img class="avatar avatar-sm" src="https://res.cloudinary.com/rohing/image/upload/v1585572497/harley-davidson-1HZcJjdtc9g-unsplash_vwslej.jpg"></td>
-                <td class="additional-padding">Jessica Brownly</td>
-                <td class=" name-decoration">j.brownly@gmail.com</td>
-                <td>+33 956 340 4057</td>
-                <td>22/01/1984</td>
-                <td>REGISTERED</td>
-                <td class="additional-padding">
-                  <span  data-bs-display="static" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" class="dropdown-toggle ed-more-vertical icon-border fs-5 cursor-pointer"></span>
-                  <ul @click.stop=""  class="employee-menu dropdown-menu py-0 border-0" aria-labelledby="dropdownMenuButton1">
-                    <li><a class="dropdown-item py-3">
-                      <span class="ed-eye text-eden-mint me-3 fw-bold"></span>
-                      <span class="body-1">View details</span>
-                    </a></li>
-                    <li><a class="dropdown-item py-3" href="#">
-                      <span class="ed-play text-eden-mint me-3 fw-bold"></span>
-                      <span class="body-1">Unfreeze Member</span>
-                    </a></li>
-                    <li>
-                      <a class="dropdown-item cursor-pointer py-3" >
-                        <span class="ed-trash text-bad-red me-3 fw-bold"></span>
-                        <span class="body-1">Remove Member</span>
-                      </a>
-                    </li>
-                  </ul>
-                </td>
-              </tr>
               </tbody>
-              <!-- <tbody>
+              <tbody v-else>
                   <tr>
                   <td  class="emptyTable" colSpan="100">
                       <div class="card border-0">
@@ -115,8 +88,8 @@
                       </div>
                   </td>
               </tr>
-              </tbody> -->
-              <!-- <tbody v-if="filteredRecords && filteredRecords.length == 0">
+              </tbody>
+              <tbody v-if="filteredRecords && filteredRecords.length == 0">
                   <tr>
                   <td  class="emptyTable" colSpan="100">
                       <div class="card border-0">
@@ -124,14 +97,14 @@
                           <img class="mb-3" style="height: 4.4rem" src="~/assets/nothing.svg">
                           <div class="text-center mb-5">
                               <h6 class="mb-3">No Results found</h6>
-                              <p class="text-black-50">We could not find any loan request matching your search. <br>Please try something else. </p>
+                              <p class="text-black-50">We could not find any HR member matching your search. <br>Please try something else. </p>
 
                           </div>
                           </div>
                       </div>
                   </td>
               </tr>
-              </tbody> -->
+              </tbody>
             </table>
           </div>
           <!-- <LoanDetails :details="loanDetails" id="loan-details-modal" /> -->
@@ -145,6 +118,8 @@
 
 <script>
 import HRdetails from '~/components/salaryadvance/HRdetails.vue'
+import { mapGetters } from 'vuex'
+import _orderby from "lodash.orderby"
 
 export default {
   components:{
@@ -154,7 +129,11 @@ export default {
     return {
       search: "",
       detailsModal: null,
-      details: null
+      details: null,
+      sort: {
+        key: 'name',
+        order: 'asc'
+      },
     }
   },
 
@@ -165,11 +144,69 @@ export default {
         this.detailsModal.show()
       })
     },
+
+    dated(val) {
+      return this.$dateFns.format(new Date(val), 'dd/ LL/yyyy')
+    },
+
+    sortBy(column) {
+      this.sort.key = column;
+      this.sort.order = this.sort.order === 'asc' ? 'desc' : 'asc'
+    },
   },
 
    mounted() {
     let _detailsModal  = document.getElementById('hr-details-modal');
     this.detailsModal = new bootstrap.Modal(_detailsModal);
+  },
+
+      computed: {
+    ...mapGetters({
+      membersList: 'salary-advance/businessMembers'
+    }),
+
+    filteredRecords() {
+      if(this.membersList && this.membersList.length > 0) {
+        let records = this.membersList;
+
+        if(this.sort.key) {
+          records = _orderby(records, (i) => {
+            let value = i[this.sort.key]
+
+            if(!isNaN(Date.parse(value))) {
+              return Date.parse(value)
+            }
+
+            if(!isNaN(parseFloat(value))) {
+              return parseFloat(value)
+            }
+
+            return String(i[this.sort.key]).toLowerCase()
+          }, this.sort.order)
+        }
+        if(this.search){
+          records = records.filter(record =>{
+            return (
+              record.first_name.toLowerCase().includes(this.search.toLowerCase()) ||
+              record.last_name.toLowerCase().includes(this.search.toLowerCase()) ||
+              record.email.toLowerCase().includes(this.search.toLowerCase())
+            )
+          })
+        }
+
+        return records
+      }
+    }
+  },
+
+  async beforeMount() {
+    this.user = Object.assign({}, this.$store.state.auth.user)
+    let role = "HR"
+    try {
+      await this.$store.dispatch('salary-advance/getMembers', role)
+    }catch (e) {
+      console.log(e)
+    }
   }
 }
 

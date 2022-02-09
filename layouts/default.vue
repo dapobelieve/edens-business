@@ -98,11 +98,11 @@ export default {
         //   iconClass: 'ed-pie-chart',
         //   path: '/stakeholder'
         // },
-        // {
-        //   name: 'Salary Advance',
-        //   iconClass: 'ed-salary-advance',
-        //   path: '/salary-advance'
-        // }
+        {
+          name: 'Salary Advance',
+          iconClass: 'ed-salary-advance',
+          path: '/salary-advance'
+        }
       ],
       settingsModal: null
     }

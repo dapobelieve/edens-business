@@ -14,12 +14,20 @@
               <div class="d-flex flex-column justify-content-center align-items-center w-100">
                 <div class="mb-4 w-100">
                   <div class="mb-2"><span class="fw-bold body-1">Branch name</span></div>
-                  <input placeholder="Branch name" type="text" class="form-control">
+                  <label class="eden-text-input" :class="$v.form.name.$error ? 'eden-text-input-error': ''">
+                    <input placeholder="Branch name" type="text" class="form-control" v-model="$v.form.name.$model">
+                    <span v-if="$v.form.name.$error" class="ed-x"></span>
+                  </label>
+                  <small class="fs-7 text-bad-red" v-if="$v.form.name.$error">{{nameErr}}</small>
                 </div>
 
                 <div class="mb-4 w-100">
                   <div class="mb-2"><span class="fw-bold body-1">Branch Address</span></div>
-                  <input placeholder="Enter Address" type="text" class="form-control">
+                  <label class="eden-text-input" :class="$v.form.address.$error ? 'eden-text-input-error': ''">
+                    <input placeholder="Enter Address" type="text" class="form-control" v-model="$v.form.address.$model">
+                    <span v-if="$v.form.address.$error" class="ed-x"></span>
+                  </label>
+                  <small class="fs-7 text-bad-red" v-if="$v.form.address.$error">{{addressErr}}</small>
                 </div>
               </div>
             </div>
@@ -36,30 +44,82 @@
 <script>
 
 import InviteDirector from '~/components/wallet/upgrade/InviteDirector'
+import { required } from 'vuelidate/lib/validators'
+
 export default {
   components: { InviteDirector },
   data () {
     return {
-      form: {},
+      form: {
+        name:'',
+        address:''
+      },
       btn: {
         loading: false
       },
     }
   },
+  validations: {
+    form: {
+      name:{ required },
+      address: { required }
+    }
+  },
+  computed:  {
+    nameErr() {
+      if (!this.$v.form.name.required) return "Please enter the name of the branch"
+    },
+    addressErr() {
+      if (!this.$v.form.address.required) return "Please enter the address";
+    }
+  },
   methods: {
-    send() {
-      setTimeout(() => {
+    async send() {
+      this.$v.$touch();
+      if (!this.$v.$invalid) {
+        this.btn.loading = true;
+        try {
+          let res = await this.$store.dispatch('branch/createBranch', {...this.form})
+          let toast = new bootstrap.Toast(document.getElementById('liveToast'), {
+          delay: 7000,
+          animation: true,
+          })
+          this.$store.commit('auth/setStates', {toast: {show: true,
+              data: {
+                header: 'Branch Created!',
+                body: `Branch creation successfull!`
+              }}})
+          toast.show()
+          await this.$store.dispatch('branch/getBranches')
 
-      })
+        }catch (e) {
+          let toast = new bootstrap.Toast(document.getElementById('liveToast'), {
+          delay: 7000,
+          animation: true,
+          })
+          this.$store.commit('auth/setStates', {toast: {show: true,
+              data: {
+                header: 'Ooops!',
+                body: `${e.message}`
+              }}})
+          toast.show()
+          this.error = e.message
+        }
+        finally {
+        this.btn.loading= false;
+        this.form.name="  "
+        this.close()
+      }
+      }
     },
     close() {
-      let modal = bootstrap.Modal.getInstance(document.getElementById('invite-hr'))
+      let modal = bootstrap.Modal.getInstance(document.getElementById('invite-branch'))
       modal.hide()
     }
   },
   mounted() {
     this.userData = Object.assign({}, this.$store.state.auth.user)
-    let modal = document.getElementById("invite-hr")
+    let modal = document.getElementById("invite-branch")
     modal.addEventListener('hidden.bs.modal', () => {
       this.showFundingOptions = true
     })

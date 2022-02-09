@@ -30,7 +30,7 @@
                 <th scope="col" class="additional-padding">
                 <span class="d-flex align-items-center">
                     <span class="me-2">NAME</span>
-                    <span @click="sortBy('first_name')" class="cursor-pointer d-inline-flex flex-column">
+                    <span @click="sortBy('name')" class="cursor-pointer d-inline-flex flex-column">
                     <span class="arrow arrow-up"></span>
                     <span class="arrow arrow-down"></span>
                     </span>
@@ -41,35 +41,11 @@
 
               </tr>
               </thead>
-              <tbody >
-              <tr class="cursor-pointer">
+              <tbody v-if="branches && branches.length > 0" >
+              <tr v-for="(data, dataIndex) in filteredRecords" :key="dataIndex">
                 <td class="image-padding"><img class="avatar avatar-sm" src="https://res.cloudinary.com/rohing/image/upload/v1585572497/harley-davidson-1HZcJjdtc9g-unsplash_vwslej.jpg"></td>
-                <td class="additional-padding name-decoration">Branch name HR</td>
-                <td>Old Labor Ministry Building, UN Drive, Monrovia</td>
-                <td class="additional-padding">
-                  <span  data-bs-display="static" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" class="dropdown-toggle ed-more-vertical icon-border fs-5 cursor-pointer"></span>
-                  <ul @click.stop=""  class="employee-menu dropdown-menu py-0 border-0" aria-labelledby="dropdownMenuButton1">
-                    <li @click="showBranchDetails('data')"><a class="dropdown-item py-3">
-                      <span class="ed-eye text-eden-mint me-3 fw-bold"></span>
-                      <span class="body-1">View details</span>
-                    </a></li>
-                    <li><a class="dropdown-item py-3" href="#">
-                      <span class="ed-edit text-eden-mint me-3 fw-bold"></span>
-                      <span class="body-1">Edit details</span>
-                    </a></li>
-                    <li>
-                      <a class="dropdown-item cursor-pointer py-3" >
-                        <span class="ed-trash text-bad-red me-3 fw-bold"></span>
-                        <span class="body-1">Remove Branch</span>
-                      </a>
-                    </li>
-                  </ul>
-                </td>
-              </tr>
-              <tr class="cursor-pointer">
-                <td class="image-padding"><img class="avatar avatar-sm" src="https://res.cloudinary.com/rohing/image/upload/v1585572497/harley-davidson-1HZcJjdtc9g-unsplash_vwslej.jpg"></td>
-                <td class="additional-padding name-decoration">Branch name HR</td>
-                <td>Old Labor Ministry Building, UN Drive, Monrovia</td>
+                <td class="additional-padding name-decoration">{{data.name}}</td>
+                <td>{{data.address}}</td>
                 <td class="additional-padding">
                   <span  data-bs-display="static" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" class="dropdown-toggle ed-more-vertical icon-border fs-5 cursor-pointer"></span>
                   <ul @click.stop=""  class="employee-menu dropdown-menu py-0 border-0" aria-labelledby="dropdownMenuButton1">
@@ -91,7 +67,7 @@
                 </td>
               </tr>
               </tbody>
-              <!-- <tbody>
+              <tbody v-else>
                   <tr>
                   <td  class="emptyTable" colSpan="100">
                       <div class="card border-0">
@@ -99,15 +75,15 @@
                           <img class="mb-3" style="height: 4.4rem" src="~/assets/nothing.svg">
                           <div class="text-center mb-5">
                               <h6 class="mb-3">Nothing to see here</h6>
-                              <p class="text-black-50">You’re yet to invite your HR members.
+                              <p class="text-black-50">You’re yet to create a new branch.
                               </p>
                           </div>
                           </div>
                       </div>
                   </td>
               </tr>
-              </tbody> -->
-              <!-- <tbody v-if="filteredRecords && filteredRecords.length == 0">
+              </tbody>
+              <tbody v-if="filteredRecords && filteredRecords.length == 0">
                   <tr>
                   <td  class="emptyTable" colSpan="100">
                       <div class="card border-0">
@@ -115,14 +91,14 @@
                           <img class="mb-3" style="height: 4.4rem" src="~/assets/nothing.svg">
                           <div class="text-center mb-5">
                               <h6 class="mb-3">No Results found</h6>
-                              <p class="text-black-50">We could not find any loan request matching your search. <br>Please try something else. </p>
+                              <p class="text-black-50">We could not find any branch request matching your search. <br>Please try something else. </p>
 
                           </div>
                           </div>
                       </div>
                   </td>
               </tr>
-              </tbody> -->
+              </tbody>
             </table>
           </div>
           <!-- <LoanDetails :details="loanDetails" id="loan-details-modal" /> -->
@@ -136,6 +112,9 @@
 
 <script>
 import HRdetails from '~/components/salaryadvance/HRdetails.vue'
+import { mapGetters } from 'vuex'
+import _orderby from "lodash.orderby"
+
 
 export default {
   components:{
@@ -145,7 +124,11 @@ export default {
     return {
       search: "",
       detailsModal: null,
-      details: null
+      details: null,
+      sort: {
+        key: 'name',
+        order: 'asc'
+      },
     }
   },
 
@@ -153,7 +136,59 @@ export default {
     showBranchDetails(data) {
       this.details = data;
     },
+
+    sortBy(column) {
+      this.sort.key = column;
+      this.sort.order = this.sort.order === 'asc' ? 'desc' : 'asc'
+    },
   },
+
+    computed: {
+    ...mapGetters({
+      branches: 'branch/branchList'
+    }),
+
+    filteredRecords() {
+      if(this.branches && this.branches.length > 0) {
+        let records = this.branches;
+
+        if(this.sort.key) {
+          records = _orderby(records, (i) => {
+            let value = i[this.sort.key]
+
+            if(!isNaN(Date.parse(value))) {
+              return Date.parse(value)
+            }
+
+            if(!isNaN(parseFloat(value))) {
+              return parseFloat(value)
+            }
+
+            return String(i[this.sort.key]).toLowerCase()
+          }, this.sort.order)
+        }
+        if(this.search){
+          records = records.filter(record =>{
+            return (
+              record.name.toLowerCase().includes(this.search.toLowerCase()) ||
+              record.address.toLowerCase().includes(this.search.toLowerCase())
+            )
+          })
+        }
+
+        return records
+      }
+    }
+  },
+
+  async beforeMount() {
+    this.user = Object.assign({}, this.$store.state.auth.user)
+    try {
+      await this.$store.dispatch('branch/getBranches', this.user.reference)
+    }catch (e) {
+      console.log(e)
+    }
+  }
 
 //    mounted() {
 //     let _detailsModal  = document.getElementById('hr-details-modal');
