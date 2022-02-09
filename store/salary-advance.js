@@ -11,12 +11,12 @@ export const mutations = {
   }
 }
 export const actions = {
-    // async getBranches({commit}, ref) {
-    //     let res = await this.$axios.$get(`/business/${ref}/branches`)
-    //     if(res.code === 200){
-    //     commit("setStates", {branches: res.business_branches}) 
-    //     }
-    // },
+    async getMembers({commit}, role, ref) {
+        let res = await this.$axios.$get(`/business/members?business_role=${role}`)
+        if(res.code === 200){
+        commit("setStates", {members: res.members}) 
+        }
+    },
 
     async inviteMembers({commit}, payload) {
     let res = await this.$axios.$post('/business/invite', {...payload})

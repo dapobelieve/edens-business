@@ -8,7 +8,7 @@
             <span class="ed-x fs-5"></span>
           </a>
         </div>
-        <div class="modal-body">
+        <div v-if="details" class="modal-body">
         <!-- <div v-if="details" class="modal-body"> -->
             <div  class="text-center img-div-padding">
                 <img class="avatar avatar-lg" src="https://res.cloudinary.com/rohing/image/upload/v1585572497/harley-davidson-1HZcJjdtc9g-unsplash_vwslej.jpg"><br/>
@@ -17,24 +17,24 @@
           <div class="px-3">
             <div class="d-flex justify-content-between mb-5">
               <small class="text-black-50">ID NUMBER</small>
-              <span class="body-1 text-jungle-green">AD34A</span>
+              <span class="body-1 text-jungle-green">{{details.reference}}</span>
             </div>
             <div class="d-flex justify-content-between mb-5">
               <small class="text-black-50">NAME</small>
-              <span class="body-1 text-jungle-green">Jessica Brownly</span>
+              <span class="body-1 text-jungle-green">{{details.first_name + ' ' + details.last_name}}</span>
             </div>
             <div class="d-flex justify-content-between mb-5">
               <small class="text-black-50">DATE JOINED</small>
-              <span class="body-1 text-jungle-green">20 Jan, 2020</span>
+              <span class="body-1 text-jungle-green">{{details.created_at | dateFormatter}}</span>
             </div>
             <div class="d-flex justify-content-between mb-5">
               <small class="text-black-50">EMAIL ADDRESS</small>
-              <span class="body-1 text-jungle-green">j.brownly@gmail.com</span>
+              <span class="body-1 text-jungle-green">{{details.email}}</span>
             </div>
             <div class="d-flex justify-content-between mb-5">
               <small class="text-black-50">PHONE NUMBER</small>
               <span class="body-1 ">
-                +33 604 670 2305
+                {{details.phone_number}}
               </span>
             </div>
             

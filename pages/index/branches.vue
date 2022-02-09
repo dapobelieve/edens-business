@@ -136,6 +136,11 @@ export default {
     showBranchDetails(data) {
       this.details = data;
     },
+
+    sortBy(column) {
+      this.sort.key = column;
+      this.sort.order = this.sort.order === 'asc' ? 'desc' : 'asc'
+    },
   },
 
     computed: {
