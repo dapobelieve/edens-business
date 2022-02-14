@@ -68,11 +68,6 @@ export default {
           iconClass: 'ed-wallet'
         },
         {
-          name: 'Bills Payment',
-          path:  '/bills',
-          iconClass: 'ed-bills-payments',
-        },
-        {
           name: 'Loans',
           path:  '/loans',
           iconClass: 'ed-loans',
@@ -81,6 +76,16 @@ export default {
           name: 'Branches',
           iconClass: 'ed-branch',
           path: '/branches'
+        },
+        {
+          name: 'Salary Advance',
+          iconClass: 'ed-salary-advance',
+          path: '/salary-advance'
+        },
+        {
+          name: 'Bills Payment',
+          path:  '/bills',
+          iconClass: 'ed-bills-payments',
         },
         {
           name: 'Notification',
@@ -98,11 +103,7 @@ export default {
         //   iconClass: 'ed-pie-chart',
         //   path: '/stakeholder'
         // },
-        {
-          name: 'Salary Advance',
-          iconClass: 'ed-salary-advance',
-          path: '/salary-advance'
-        }
+        
       ],
       settingsModal: null
     }
