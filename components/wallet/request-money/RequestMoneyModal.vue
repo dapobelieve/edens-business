@@ -8,7 +8,7 @@
             <span class="ed-x fs-5"></span>
           </a>
         </div>
-        <RequestAmount v-if="tab === 'REQUEST_AMOUNT'" @generate-link="tab = 'REQUEST_SUMMARY'; form = {...form, ...$event}" />
+        <RequestAmount :loading="loading" v-if="tab === 'REQUEST_AMOUNT'" @generate-link="form = {...form, ...$event}; sendMoneyRequest()" />
         <RequestMoneySummary :form="form" v-else-if="tab = 'REQUEST_SUMMARY'" />
       </div>
     </div>
@@ -23,13 +23,32 @@ export default {
   data () {
     return {
       tab: "REQUEST_AMOUNT",
-      form: {},
+      form: {
+        amount: 30000,
+        description: 'some here',
+        link: 'https://edens360.com/L231KHodf'
+      },
+      loading: false,
       fund: {
         method: ''
       }
     }
   },
   methods: {
+    async sendMoneyRequest() {
+      try {
+        this.loading = true
+        let res = await this.$store.dispatch('wallet/requestMoney', {
+          amount: this.form.amount,
+          description: this.form.description || ""
+        })
+        this.loading = false
+        this.tab = 'REQUEST_SUMMARY'
+        this.form.link = res.link
+      }catch (e) {
+        console.log(e)
+      }
+    },
     close() {
       let modal = bootstrap.Modal.getInstance(document.getElementById('request-money-modal'))
       modal.hide()

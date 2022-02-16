@@ -12,12 +12,12 @@
           <small class="text-black-50"></small>
         </div>
         <label class="eden-text-input">
-          <textarea v-model="form.description" class="form-control w-100 text-black-50" placeholder="Enter description here" rows="8" style="resize: none"></textarea>
+          <textarea v-model="form.description" class="form-control w-100 text-black-50" placeholder="Enter description here (optional)" rows="8" style="resize: none"></textarea>
         </label>
       </div>
     </div>
     <div class="modal-footer ms-0 px-4 justify-content-end">
-      <button @click="$emit('generate-link', form)" type="button" class="btn btn-sm btn-jungle-green px-5">Generate Link</button>
+      <EdenButton :disabled="loading" :loading="loading"  @click="next" type="button" class="btn btn-sm btn-jungle-green px-5">Generate Link</EdenButton>
     </div>
   </div>
 </template>
@@ -25,9 +25,12 @@
 <script>
 import { mapGetters } from "vuex"
 import { required, numeric, minValue, maxValue } from "vuelidate/lib/validators";
+import EdenButton from '~/components/EdenButton'
 // const minCheck = function(value) { return value >= this.min } ;
 // const maxCheck = function(value) { return value <= this.max } ;
 export default {
+  components: { EdenButton },
+  props: ['loading'],
   data() {
     return {
       form: {
@@ -57,7 +60,7 @@ export default {
     next() {
       this.$v.$touch();
       if (!this.$v.$invalid) {
-        this.$emit("loan-success", {...this.form})
+        this.$emit("generate-link", {...this.form})
       }
     }
   },
@@ -65,12 +68,6 @@ export default {
     ...mapGetters({
       config: "auth/getConfig"
     }),
-    // min() {
-    //   return parseInt(this.config.minimum_loan_amount/100)
-    // },
-    // max() {
-    //   return parseInt(this.config.maximum_loan_amount/100)
-    // },
     amountErr() {
       if (!this.$v.form.amount.required) return "Enter an amount";
       if (!this.$v.form.amount.numeric) return "Only numbers allowed";

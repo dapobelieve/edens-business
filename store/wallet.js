@@ -13,6 +13,13 @@ export const mutations = {
   }
 }
 export const actions = {
+  async requestMoney({dispatch}, payload) {
+    return this.$axios.$post(`/request/link`, {
+      amount: payload.amount,
+      description: payload.description || 'request money'
+    })
+
+  },
   async withdraw({dispatch, commit}, payload) {
     let res = await this.$axios.$post('/wallet/withdraw', {...payload})
     if(res.code === 200){
