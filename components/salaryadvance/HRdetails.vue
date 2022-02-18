@@ -31,6 +31,12 @@
               <small class="text-black-50">EMAIL ADDRESS</small>
               <span class="body-1 text-jungle-green">{{details.email}}</span>
             </div>
+            <div class="d-flex justify-content-between mb-5" v-if="details.business_branch">
+              <small class="text-black-50">BRANCH</small>
+              <span class="body-1 ">
+                {{details.business_branch.name}}
+              </span>
+            </div>
             <div class="d-flex justify-content-between mb-5">
               <small class="text-black-50">PHONE NUMBER</small>
               <span class="body-1 ">
