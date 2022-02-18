@@ -4,32 +4,40 @@
       <div class="border rounded-2 h-100 align-items-start d-flex p-4 mb-3">
         <div class="me-5"><img src="~/assets/images/request-summary.svg"></div>
         <div class="flex-grow-1">
-          <div>
-            <div><span class="fw-bold text-black-50">Amount Requested:</span></div>
-            <div class="fw-bold">$1,000</div>
+          <div class="d-flex">
+            <div>
+              <div><span class="fw-bold text-black-50">Amount Requested:</span></div>
+              <div class="fw-bold">{{ form.amount | currency }}</div>
+            </div>
+            <div class="ms-auto">
+              <img class="cursor-pointer" src="~/assets/images/delete.svg">
+            </div>
             <hr>
           </div>
           <div>
             <div><span class="fw-bold text-black-50">Note:</span></div>
-            <div class="fw-bold">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,</div>
+            <div class="fw-bold">
+              {{form.description}}
+            </div>
             <hr>
           </div>
           <div>
             <div><span class="fw-bold text-black-50">Link:</span></div>
             <div class="fw-bold">
-              <a class="text-eden-green text-decoration-underline">https://www.eden360.com/jessica</a>
+              <a class="text-eden-green text-decoration-underline">{{ form.link }}</a>
             </div>
           </div>
         </div>
       </div>
     </div>
     <div class="modal-footer ms-0 px-4 justify-content-end">
-      <EdenButton :disabled="copied" :loading="btn.loading" @click="createLink('https://www.eden360.com/jessica')" type="button" class="btn btn-sm btn-jungle-green px-5">{{btn.text}}</EdenButton>
+      <EdenButton :disabled="copied" :loading="btn.loading" @click="createLink(form.link)" type="button" class="btn btn-sm btn-jungle-green px-5">{{btn.text}}</EdenButton>
     </div>
   </div>
 </template>
 <script>
 export default {
+  props: ['form'],
   data() {
     return {
       copied: false,

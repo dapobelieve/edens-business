@@ -1,8 +1,8 @@
 import Vue from "vue"
 
 export const state = () => ({
-  // current: null,
-  current: {
+  current: null,
+  _current: {
     credit_score: {
       percent: 20,
       number_of_repayments: 5
@@ -32,7 +32,7 @@ export const mutations = {
 }
 export const actions = {
   async loanRequest({commit}, payload) {
-    let res = await this.$axios.$post('/loans',  {...payload})
+    let res = await this.$axios.$post('/loans',  {...payload, loan_type: 'Personal'})
     return res
   },
   async getAllLoans({commit}, payload) {

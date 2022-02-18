@@ -114,7 +114,6 @@ export default {
         this.disableUpload = true
         this.uploadComplete = false;
       }else {
-        // this.$emit('upload-complete', this.fileObj.file)
         this.$emit('file-selected', this.fileObj.file)
         this.$emit('receive-file', this.fileObj.file, this.fileType)
         this.uploadComplete = true;
