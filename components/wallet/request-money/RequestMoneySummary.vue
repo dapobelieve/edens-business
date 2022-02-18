@@ -4,9 +4,14 @@
       <div class="border rounded-2 h-100 align-items-start d-flex p-4 mb-3">
         <div class="me-5"><img src="~/assets/images/request-summary.svg"></div>
         <div class="flex-grow-1">
-          <div>
-            <div><span class="fw-bold text-black-50">Amount Requested:</span></div>
-            <div class="fw-bold">{{ form.amount | currency }}</div>
+          <div class="d-flex">
+            <div>
+              <div><span class="fw-bold text-black-50">Amount Requested:</span></div>
+              <div class="fw-bold">{{ form.amount | currency }}</div>
+            </div>
+            <div class="ms-auto">
+              <img class="cursor-pointer" src="~/assets/images/delete.svg">
+            </div>
             <hr>
           </div>
           <div>

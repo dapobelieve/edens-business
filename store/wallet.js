@@ -18,7 +18,6 @@ export const actions = {
       amount: payload.amount,
       description: payload.description || 'request money'
     })
-
   },
   async withdraw({dispatch, commit}, payload) {
     let res = await this.$axios.$post('/wallet/withdraw', {...payload})
