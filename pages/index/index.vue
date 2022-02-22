@@ -66,7 +66,7 @@
                 <nuxt-link to="wallet/card-activities" class="body-1 cursor-pointer text-jungle-green d-inline-flex align-items-center">View all <span class="text-eden-mint fs-6 ed-chevron-right"></span></nuxt-link>
               </div>
             </div>
-            <WalletActivityComponenet :key="x" class="mb-5" v-for="x in 4" />
+<!--            <WalletActivityComponenet :key="x" class="mb-5" v-for="x in 4" />-->
           </div>
         </div>
       </div>
