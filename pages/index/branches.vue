@@ -49,15 +49,15 @@
                 <td class="additional-padding">
                   <span  data-bs-display="static" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" class="dropdown-toggle ed-more-vertical icon-border fs-5 cursor-pointer"></span>
                   <ul @click.stop=""  class="employee-menu dropdown-menu py-0 border-0" aria-labelledby="dropdownMenuButton1">
-                    <li @click="showBranchDetails('data')"><a class="dropdown-item py-3">
+                    <li @click="showBranchDetails(data)"><a class="dropdown-item py-3">
                       <span class="ed-eye text-eden-mint me-3 fw-bold"></span>
                       <span class="body-1">View details</span>
                     </a></li>
-                    <li><a class="dropdown-item py-3" href="#">
+                    <li @click="showUpdateDetails(data)"><a class="dropdown-item py-3" href="#">
                       <span class="ed-edit text-eden-mint me-3 fw-bold"></span>
                       <span class="body-1">Edit details</span>
                     </a></li>
-                    <li>
+                    <li @click="showDeleteConfirm(data)">
                       <a class="dropdown-item cursor-pointer py-3" >
                         <span class="ed-trash text-bad-red me-3 fw-bold"></span>
                         <span class="body-1">Remove Branch</span>
@@ -106,25 +106,34 @@
       </div>
     </template>
 
-    <!-- <HRdetails :details="details" id="hr-details-modal" /> -->
+    <Branchdetails :details="details" id="branch-details-modal" />
+    <UpdateBranch :details="details" id="branch-update-modal" @update-branch="updateBranch" :loading="loading"/>
+    <DeleteBranchConfirm :details="details" id="delete-branch-modal" @cancel-button="cancelModal" @delete-branch="deleteBranch" :loading="loading" />
   </div>
 </template>
 
 <script>
-import HRdetails from '~/components/salaryadvance/HRdetails.vue'
+import Branchdetails from '~/components/salaryadvance/Branchdetails.vue'
+import UpdateBranch from '~/components/salaryadvance/UpdateBranch.vue'
+import DeleteBranchConfirm from '~/components/salaryadvance/DeleteBranchConfirm.vue'
 import { mapGetters } from 'vuex'
 import _orderby from "lodash.orderby"
 
 
 export default {
   components:{
-    HRdetails,
+    Branchdetails,
+    UpdateBranch,
+    DeleteBranchConfirm
   },
   data() {
     return {
       search: "",
       detailsModal: null,
+      updateModal: null,
+      deleteModal: null,
       details: null,
+      loading: false,
       sort: {
         key: 'name',
         order: 'asc'
@@ -135,6 +144,91 @@ export default {
   methods: {
     showBranchDetails(data) {
       this.details = data;
+      this.detailsModal.show()
+    },
+    showUpdateDetails(data) {
+      this.details = data;
+      this.updateModal.show()
+    },
+    showDeleteConfirm(data) {
+      this.details = data;
+      this.deleteModal.show()
+    },
+    cancelModal (){
+      this.deleteModal.hide()
+    },
+    async updateBranch(data){
+      this.loading = true;
+       try {
+        let res = await this.$axios.$patch(`business/branch/${data.reference}`, {
+          name: data.name,
+          address: data.address
+          })
+        let toast = new bootstrap.Toast(document.getElementById('liveToast'), {
+          delay: 7000,
+          animation: true,
+        })
+        this.$store.commit('auth/setStates', {toast: {show: true,
+            data: {
+              header: 'Branch Updated!',
+              body: `You have updated ${data.name} successfully and they have been notified`
+            }}})
+        toast.show()
+      }
+      catch (e) {
+        let toast = new bootstrap.Toast(document.getElementById('liveToast'), {
+          delay: 7000,
+          animation: true,
+        })
+        this.$store.commit('auth/setStates', {toast: {show: true,
+            data: {
+              header: 'Ooops!',
+              body: `${e.message}`
+            }}})
+        toast.show()
+        this.error = e.message
+      }
+      finally {
+        this.loading = false
+        this.updateModal.hide()
+        await this.$store.dispatch('branch/getBranches', this.user.reference)
+  
+      }
+    },
+    async deleteBranch(ref){
+      this.loading = true;
+       try {
+        let res = await this.$axios.$patch(`business/branch/${ref.reference}`, ref)
+        let toast = new bootstrap.Toast(document.getElementById('liveToast'), {
+          delay: 7000,
+          animation: true,
+        })
+        this.$store.commit('auth/setStates', {toast: {show: true,
+            data: {
+              header: 'Branch Removed!',
+              body: `You have removed ${ref.name} from your account and they have been notified`
+            }}})
+        toast.show()
+      }
+      catch (e) {
+        let toast = new bootstrap.Toast(document.getElementById('liveToast'), {
+          delay: 7000,
+          animation: true,
+        })
+        this.$store.commit('auth/setStates', {toast: {show: true,
+            data: {
+              header: 'Ooops!',
+              body: `${e.message}`
+            }}})
+        toast.show()
+        this.error = e.message
+      }
+      finally {
+        this.loading = false
+        this.deleteModal.hide()
+        await this.$store.dispatch('branch/getBranches', this.user.reference)
+  
+      }
     },
 
     sortBy(column) {
@@ -188,12 +282,16 @@ export default {
     }catch (e) {
       console.log(e)
     }
-  }
+  },
 
-//    mounted() {
-//     let _detailsModal  = document.getElementById('hr-details-modal');
-//     this.detailsModal = new bootstrap.Modal(_detailsModal);
-//   }
+  mounted() {
+    let _detailsModal  = document.getElementById('branch-details-modal');
+    this.detailsModal = new bootstrap.Modal(_detailsModal);
+    let _updateModal  = document.getElementById('branch-update-modal');
+    this.updateModal = new bootstrap.Modal(_updateModal);
+    let _deleteModal  = document.getElementById('delete-branch-modal');
+    this.deleteModal = new bootstrap.Modal(_deleteModal);
+  }
 }
 
 </script>
