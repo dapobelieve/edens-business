@@ -51,7 +51,7 @@
                 <td class=" name-decoration">{{data.email}}</td>
                 <td>{{data.phone_number}}</td>
                 <td v-if="data && data.created_at">{{dated(data.created_at)}}</td> <td v-else>24/09/2010</td>
-                <td>Registered</td>
+                <td>{{data.business_status}}</td>
                 <td class="additional-padding">
                   <span  data-bs-display="static" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" class="dropdown-toggle ed-more-vertical icon-border fs-5 cursor-pointer"></span>
                   <ul @click.stop=""  class="employee-menu dropdown-menu py-0 border-0" aria-labelledby="dropdownMenuButton1">
@@ -59,11 +59,15 @@
                       <span class="ed-eye text-eden-mint me-3 fw-bold"></span>
                       <span class="body-1">View details</span>
                     </a></li>
-                    <li><a class="dropdown-item py-3" href="#">
+                    <li v-if="data.business_status.toLowerCase() === 'active'" @click="showUpdateConfirm(data, 'Freeze')"><a class="dropdown-item py-3" href="#">
                       <span class="ed-pause text-eden-mint me-3 fw-bold"></span>
                       <span class="body-1">Freeze Member</span>
                     </a></li>
-                    <li>
+                    <li v-else-if="data.business_status.toLowerCase() === 'frozen'" @click="showUpdateConfirm(data, 'Unfreeze')"><a class="dropdown-item py-3" href="#">
+                      <span class="ed-play text-eden-mint me-3 fw-bold"></span>
+                      <span class="body-1">Unfreeze Member</span>
+                    </a></li>
+                    <li @click="showUpdateConfirm(data, 'Delete')">
                       <a class="dropdown-item cursor-pointer py-3" >
                         <span class="ed-trash text-bad-red me-3 fw-bold"></span>
                         <span class="body-1">Remove Member</span>
@@ -113,23 +117,29 @@
     </template>
 
     <HRdetails :details="details" id="hr-details-modal" />
+    <HRStatusConfirm :details="details" :action="action" @cancel-button="cancelModal" @update-status="updateStatus" :loading="loading" id="status-confirm-modal" />
   </div>
 </template>
 
 <script>
 import HRdetails from '~/components/salaryadvance/HRdetails.vue'
+import HRStatusConfirm from '~/components/salaryadvance/HRStatusConfirm.vue'
 import { mapGetters } from 'vuex'
 import _orderby from "lodash.orderby"
 
 export default {
   components:{
     HRdetails,
+    HRStatusConfirm
   },
   data() {
     return {
       search: "",
       detailsModal: null,
+      statusModal: null,
       details: null,
+      action: null,
+      loading: false,
       sort: {
         key: 'name',
         order: 'asc'
@@ -145,6 +155,56 @@ export default {
       })
     },
 
+    showUpdateConfirm(data, action) {
+      this.details = data;
+      this.action = action
+      this.$nextTick(() => {
+        this.statusModal.show()
+      })
+    },
+
+    cancelModal (){
+      this.$nextTick(() => {
+        this.statusModal.hide()
+      })
+    },
+
+    async updateStatus(ref, data){
+      this.loading = true;
+       try {
+        let res = await this.$axios.$patch(`business/members/${ref.reference}/status`, data)
+        let toast = new bootstrap.Toast(document.getElementById('liveToast'), {
+          delay: 7000,
+          animation: true,
+        })
+        this.$store.commit('auth/setStates', {toast: {show: true,
+            data: {
+              header: 'HR Status Updated!',
+              body: `You have updated ${ref.first_name + ' ' + ref.last_name}\'s status and they have been notified`
+            }}})
+        toast.show()
+      }
+      catch (e) {
+        let toast = new bootstrap.Toast(document.getElementById('liveToast'), {
+          delay: 7000,
+          animation: true,
+        })
+        this.$store.commit('auth/setStates', {toast: {show: true,
+            data: {
+              header: 'Ooops!',
+              body: `${e.message}`
+            }}})
+        toast.show()
+        this.error = e.message
+      }
+      finally {
+        this.loading = false
+        this.statusModal.hide()
+        await this.$store.dispatch('salary-advance/getMembers', 'HR')
+  
+      }
+    },
+
     dated(val) {
       return this.$dateFns.format(new Date(val), 'dd/ LL/yyyy')
     },
@@ -158,6 +218,8 @@ export default {
    mounted() {
     let _detailsModal  = document.getElementById('hr-details-modal');
     this.detailsModal = new bootstrap.Modal(_detailsModal);
+    let _statusModal  = document.getElementById('status-confirm-modal');
+    this.statusModal = new bootstrap.Modal(_statusModal);
   },
 
       computed: {
