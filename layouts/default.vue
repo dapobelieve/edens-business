@@ -86,12 +86,7 @@ export default {
           name: 'Bills Payment',
           path:  '/bills',
           iconClass: 'ed-bills-payments',
-        },
-        {
-          name: 'Notification',
-          iconClass: 'ed-notification',
-          path: '/notification'
-        },
+        }
         // {
         //   name: 'Branches',
         //   iconClass: 'ed-branch',

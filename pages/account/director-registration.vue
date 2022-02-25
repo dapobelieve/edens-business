@@ -59,6 +59,9 @@ export default {
       }
     }
   },
+  async asyncData(ctx) {
+
+  },
   methods: {
     async register() {
       this.btn.loading = true
@@ -73,6 +76,10 @@ export default {
         this.btn.text = 'Finish'
       }
     }
+  },
+  mounted() {
+    console.log(this.$route)
+    // await this.$axios.get(`business/invite/${}`)
   }
 }
 </script>
