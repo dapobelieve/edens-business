@@ -3,7 +3,7 @@
     <div v-if="step === 1" class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h6 class="">HR Invite</h6>
+          <h6 class="">Director Invite</h6>
           <a type="button" class="ms-auto text-eden-mint d-inline-flex align-items-center justify-content-center rounded-circle" style="height: 32px; width: 32px; background: rgba(146, 204, 191, 0.1);" data-bs-dismiss="modal" aria-label="Close">
             <span class="ed-x fs-5"></span>
           </a>
@@ -15,8 +15,8 @@
                 <div class="mb-4">
                   <img style="width: 55px" src="~/assets/images/hr.svg">
                 </div>
-                <h5 class="mb-3">Invite HR Members</h5>
-                <p class="text-black-50 text-center">Please invite your company’s HR Members to <br> register on Eden360 </p>
+                <h5 class="mb-3">Invite Director</h5>
+                <p class="text-black-50 text-center">Please invite your company’s Director to <br> register on Eden360 </p>
                 <div class="mb-4 w-100">
                   <label class="eden-text-input" :class="[$v.form.invitee_email.$error ? 'eden-text-input-error': '']">
                     <input v-model="$v.form.invitee_email.$model"  placeholder="Enter email address" type="text" class="form-control">
@@ -44,13 +44,13 @@
         <div class="modal-body px-4" style="height: 30rem">
           <div class="ms-auto">
             <div>
-                <form class="search position-relative">
-                    <input name='search-records' type='search' autocomplete='randomstring' class="form-control" placeholder="Search Branch" v-model="search">
-                    <span class="ed-search cursor-pointer text-eden-mint position-absolute"></span>
-                </form>
+              <form class="search position-relative">
+                <input name='search-records' type='search' autocomplete='randomstring' class="form-control" placeholder="Search Branch" v-model="search">
+                <span class="ed-search cursor-pointer text-eden-mint position-absolute"></span>
+              </form>
             </div>
 
-              <small class="fs-7 text-bad-red" v-if="error">{{error}}</small>
+            <small class="fs-7 text-bad-red" v-if="error">{{error}}</small>
 
             <div class="mt-2">
               <div class="overflow-scroll" style="height: 25rem">
@@ -109,7 +109,7 @@ export default {
       form: {
         invitee_email: null,
         business_branch_ref: null,
-        role: 'HR'
+        role: 'Director'
       },
       btn: {
         loading: false
@@ -142,8 +142,8 @@ export default {
         try {
           let res = await this.$store.dispatch('salary-advance/inviteMembers', {...this.form})
           let toast = new bootstrap.Toast(document.getElementById('liveToast'), {
-          delay: 7000,
-          animation: true,
+            delay: 7000,
+            animation: true,
           })
           this.$store.commit('auth/setStates', {toast: {show: true,
               data: {
@@ -151,11 +151,12 @@ export default {
                 body: `Your have successful sent an invite to ${this.form.invitee_email}.`
               }}})
           toast.show()
+          // await this.$store.dispatch('branch/getBranches')
 
         }catch (e) {
           let toast = new bootstrap.Toast(document.getElementById('liveToast'), {
-          delay: 7000,
-          animation: true,
+            delay: 7000,
+            animation: true,
           })
           this.$store.commit('auth/setStates', {toast: {show: true,
               data: {
@@ -166,10 +167,10 @@ export default {
           this.error = e.message
         }
         finally {
-        this.btn.loading= false;
-        this.step = 1
-        this.close()
-      }
+          this.btn.loading= false;
+          this.step = 1
+          this.close()
+        }
       }
 
     },

@@ -20,6 +20,9 @@
       <button @click="inviteBranchModal.show()" v-if="$route.name.includes('branches')"  class="d-none ms-auto d-xl-block btn btn-jungle-green btn-sm ms-auto">
         Add New Branch
       </button>
+      <button @click="inviteDirectorModal.show()" v-if="$route.name.includes('directors')"  class="d-none ms-auto d-xl-block btn btn-jungle-green btn-sm ms-auto">
+        Invite Director
+      </button>
 
     </div>
     <keep-alive>
@@ -28,6 +31,7 @@
 <!--    <MobileNav />-->
     <InviteBranch id="invite-branch" />
     <InviteHr id="invite-hr" />
+    <InviteDirector id="invite-director" />
     <LoanModal @loan-success="requestLoanModal.hide();" @cannot-request="requestLoanModal.hide();" id="loanModal" />
     <CannotRequestLoanModal  />
 
@@ -52,8 +56,9 @@ import { mapGetters } from "vuex"
 import SettingsModal from '~/components/settings/SettingsModal'
 import InviteHr from '~/components/business/InviteHr'
 import InviteBranch from '~/components/business/InviteBranch'
+import InviteDirector from '~/components/business/InviteDirector'
 export default {
-  components: { SettingsModal, InviteHr, InviteBranch },
+  components: { InviteDirector, SettingsModal, InviteHr, InviteBranch },
   layout: "default",
   computed: {
     computeGreeting()  {
@@ -87,6 +92,7 @@ export default {
     return {
       cannotRequestModal:  null,
       inviteHrModal:  null,
+      inviteDirectorModal:  null,
       requestLoanModal: null,
       inviteBranchModal:null,
       img: "https://res.cloudinary.com/rohing/image/upload/v1585572497/harley-davidson-1HZcJjdtc9g-unsplash_vwslej.jpg",
@@ -107,9 +113,11 @@ export default {
 
     const requestLoan = document.getElementById('loanModal');
     const _inviteHrModal = document.getElementById('invite-hr');
+    const _inviteDirector = document.getElementById('invite-director');
     const _inviteBranchModal = document.getElementById('invite-branch');
     this.requestLoanModal = new bootstrap.Modal(requestLoan);
     this.inviteHrModal = new bootstrap.Modal(_inviteHrModal);
+    this.inviteDirectorModal = new bootstrap.Modal(_inviteDirector);
     this.inviteBranchModal = new bootstrap.Modal(_inviteBranchModal);
 
   }

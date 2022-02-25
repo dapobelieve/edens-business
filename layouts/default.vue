@@ -6,9 +6,9 @@
           <div class="p-4"><Logo /></div>
           <hr>
           <div class="menu flex-grow-1">
-            <nuxt-link :to="menu.path" v-for="(menu, menuIndex) in menus" :class="$route.path===menu.path ? 'menu-item-active' : ''" :key="menuIndex" class="menu-item py-3 text-black-50 d-flex align-items-center ps-4 cursor-pointer position-relative">
-              <span :class="[menu.iconClass, $route.path===menu.path ? 'text-eden-green': '', menu.iconClass === 'ed-pie-chart' ? 'fs-5 ms-2' : 'fs-2']" class="me-3 "></span>
-                <span :class="[$route.path===menu.path ? 'text-jungle-green' : '']" class="body-1 fw-bold">{{ menu.name }}</span>
+            <nuxt-link :to="menu.path" v-for="(menu, menuIndex) in menus" :class="$route.fullPath===menu.path ? 'menu-item-active' : ''" :key="menuIndex" class="menu-item py-3 text-black-50 d-flex align-items-center ps-4 cursor-pointer position-relative">
+              <span :class="[menu.iconClass, $route.fullPath===menu.path ? 'text-eden-green': '', menu.iconClass === 'ed-pie-chart' ? 'fs-5 ms-2' : 'fs-2']" class="me-3 "></span>
+                <span :class="[$route.fullPath===menu.path ? 'text-jungle-green' : '']" class="body-1 fw-bold">{{ menu.name }}</span>
             </nuxt-link>
           </div>
           <div v-if="user" class="dropup">
@@ -103,7 +103,7 @@ export default {
         //   iconClass: 'ed-pie-chart',
         //   path: '/stakeholder'
         // },
-        
+
       ],
       settingsModal: null
     }
@@ -123,6 +123,7 @@ export default {
     }),
   },
   mounted() {
+    console.log(this.$route)
     const profileModal = document.getElementById('profileModal')
     this.profileModal = new bootstrap.Modal(profileModal)
 
