@@ -5,12 +5,12 @@
     <div class="flex-grow-1">
       <template v-if="step===1">
         <keep-alive>
-          <directorinfo @success="form = {...form, ...$event}; step=2" />
+          <directorinfo :invite="invite" @success="form = {...form, ...$event}; step=2" />
         </keep-alive>
       </template>
       <template v-if="step === 2">
         <keep-alive>
-          <PhoneNumber @back="step=1" @success="form = {...form, ...$event}; step=3" />
+          <PhoneNumber :demo="{email: invite.invitee_email}" @back="step=1" @success="form = {...form, ...$event}; step=3" />
         </keep-alive>
       </template>
       <template v-if="step===3">
@@ -36,16 +36,19 @@ import PhoneNumber from '~/components/register/PhoneNumber'
 import Password from '~/components/register/password'
 import Directorinfo from '~/components/register/directorinfo'
 export default {
+  name: 'Director-Invite',
   components: { Directorinfo, Password, PhoneNumber, Upload },
   layout: "auth",
   data () {
     return {
+      invite: {},
       step: 1,
       half: 0,
       otpVerified: false,
       noOrganization: false,
-      verifyPhone: false,
-      form: {},
+      verifyPhone: true,
+      form: {
+      },
       btn: {
         loading:false,
         text: 'Proceed'
@@ -60,15 +63,22 @@ export default {
     }
   },
   async asyncData(ctx) {
-
+    try {
+      let res = await ctx.$axios.$get(`business/invite/${ctx.route.query.invite_link}`)
+      return { invite: res.invite }
+    }catch (e) {
+      console.log(e)
+    }
   },
   methods: {
     async register() {
+      this.form.invite_link = this.invite.invite_link
+      console.log(this.form)
       this.btn.loading = true
       this.btn.text = 'processing'
       try {
-        let res = await this.$store.dispatch('auth/register', this.form)
-        window.location = '/'
+        // let res = await this.$store.dispatch('business/signup', this.form)
+        // window.location = '/'
         // this.$router.replace('/')
       }catch (e) {
         console.log({e})
@@ -78,7 +88,7 @@ export default {
     }
   },
   mounted() {
-    console.log(this.$route)
+    // console.log(this.$route)
     // await this.$axios.get(`business/invite/${}`)
   }
 }

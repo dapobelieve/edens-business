@@ -10,25 +10,32 @@
         <div class="mb-4">
            <div>
                 <div class="mb-4">
-                  <SelectComponent placeholder="Select ID" :options="options" v-model="option" />
+                  <SelectComponent @input="selectHandler" placeholder="Select ID" :options="options" v-model="option" />
                 </div>
                 <div class="d-flex justify-content-between mb-3">
                   <span class="body-1 caption-2">Upload ID</span>
                   <span style="margin-right: 40px" class=" body-1 fw-normal text-black-50">PNG, JPEG, PDF</span>
                 </div>
-                <Uploader :queued="queued" @file-removed="uploadCount-=1" @upload-complete="uploadCount+=1" class="mb-5" file-type="valid_id" />
+             <Uploader
+               @file-selected="identityFile=$event"
+               :queued="queued"
+               @file-removed="identityFile=null"
+               @completed="fileUploaded"
+               class="mb-5" :file-type="form.identification_name"
+             />
               </div>
               <div>
                 <div class="mb-4">
-                  <div class="mb-2"><span class="body-1 fw-bold">Upload a valid ID</span></div>
+                  <div class="mb-2"><span class="body-1 fw-bold">Enter NIM</span></div>
                   <input v-model="form.nim" placeholder="Enter NIM" type="text" class="form-control">
+                  <small class="fs-8 text-bad-red" v-if="$v.form.nim.$error">{{nimErr}}</small>
                 </div>
               </div>
         </div>
         <div class="d-flex justify-content-between pt-6 mb-4">
           <button class="btn btn-outline-eden-mint px-3 me-3" @click.prevent="$emit('back')">
             <span class="ed-arrow-left"></span>Back</button>
-          <eden-button :disabled="btn.loading" :loading="btn.loading" class="btn btn-jungle-green" @click.prevent="sendOtp">{{ btn.text }}</eden-button>
+          <eden-button :disabled="!identityFile" :loading="btn.loading" class="btn btn-jungle-green" @click.prevent="submit">{{ btn.text }}</eden-button>
         </div>
       </form>
     </template>
@@ -44,27 +51,30 @@ export default {
   data ()  {
     return {
       error: null,
+      uploadedUrl: null,
+      option: null,
       btn: {
         loading:false,
         text: 'Proceed'
       },
-      verifyPhone: false,
-      option: null,
+      identityFile: null,
       form: {
+        identification_file_url: null,
+        identification_name: null,
         nim: null
       },
       options: [
         {
-          name: 'NIN',
-          value: 'nin'
+          name: 'National ID',
+          value: 'national_identity_card'
         },
         {
-          name: 'National ID',
-          value: 'national'
+          name: `Driver's Licence`,
+          value: 'driver_licence'
         },
         {
           name: 'International Passport',
-          value: 'ip'
+          value: 'national_identity_card'
         }
       ],
       uploadCount: 0,
@@ -73,34 +83,29 @@ export default {
   },
   validations:{
     form: {
-      phone_number: { required, numeric }
+      nim: { required, numeric }
     }
   },
   computed: {
-    phoneErr() {
-      if (!this.$v.form.phone_number.required) return "Phone number is required";
-      if (!this.$v.form.phone_number.numeric) return "Phone number should only contain numbers";
-    }
+    nimErr() {
+      if (!this.$v.form.nim.required) return "Enter your nim number";
+      if (!this.$v.form.nim.numeric) return "Only numbers allowed";
+    },
   },
   methods: {
-    async sendOtp() {
-      this.$v.$touch();
+    submit() {
+      this.$v.form.nim.$touch()
       if (!this.$v.$invalid) {
-        try {
-          this.btn.loading = true
-          if (this.form.phone_number) {
-            let res = await this.$axios.post('internals/otp', { ...this.form, type: 'phone' })
-            // alert("OTP sent")
-            this.verifyPhone = true
-          }
-        } catch (e) {
-          this.error = e.response.data.message
-        }finally {
-          this.btn.loading = false
-          this.btn.text = 'Proceed'
-        }
+        this.queued = false
       }
     },
+    fileUploaded(data) {
+      this.form.identification_file_url = data.url
+      this.$emit('success', this.form)
+    },
+    selectHandler(data) {
+      this.form.identification_name = data.value
+    }
   }
 }
 </script>

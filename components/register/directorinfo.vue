@@ -9,7 +9,7 @@
           </div>
           <div>
               <p class="mb-0 body-1 text-black-50 ">Invited by</p>
-              <p class="mb-0 fw-bolder">Hello, Braide Enterprises</p>
+              <p class="mb-0 fw-bolder">Hello, {{invite.business.name}}</p>
           </div>
       </div>
       <div class="mb-4">
@@ -47,6 +47,9 @@
 import { required, alpha } from "vuelidate/lib/validators";
 export default {
   props:  {
+    invite: {
+      type: Object
+    },
     otpVerified: {
       type: Boolean
     }
@@ -57,7 +60,7 @@ export default {
         first_name: null,
         last_name: null,
         date_of_birth: null,
-        role: null
+        role: "Director"
       }
     }
   },

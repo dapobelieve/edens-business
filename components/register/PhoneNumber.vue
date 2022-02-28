@@ -80,7 +80,8 @@ export default {
             this.verifyPhone = true
           }
         } catch (e) {
-          this.error = e.response.data.message
+          console.log(e)
+          // this.error = e.response.data.message
         }finally {
           this.btn.loading = false
           this.btn.text = 'Proceed'

@@ -67,8 +67,8 @@ export default {
     async 'queued' (queued) {
       if(!queued) {
         try {
-          await this.startUpload()
-          this.$emit('completed')
+          let uploadRes = await this.startUpload()
+          this.$emit('completed', uploadRes)
         }catch (e) {
           if (this.$axios.isCancel(e)) {
             console.log("Upload cancelled by user")
@@ -142,8 +142,6 @@ export default {
       this.$emit('file-removed');
     },
     makeFormData() {
-      console.log(this.fileObj)
-      console.log(this.fileType)
       const form = new FormData();
       form.append('file_type', `${this.fileType}`)
       form.append('file', this.fileObj.file)
