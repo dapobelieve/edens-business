@@ -17,39 +17,45 @@
             <div class="col-lg-6 m-0 p-0">
               <form>
                 <div class="mb-4">
-                  <label class="eden-text-input">
+                  <span class="fw-bolder body-1">Company Name</span>
+                  <label class="eden-text-input mt-3">
                     <input class="form-control" placeholder="Company Name">
 <!--                    <span v-if="$v.form.email.$error" class="ed-x"></span>-->
                   </label>
 <!--                  <small class="fs-7 text-bad-red" v-if="$v.form.email.$error">{{emailErr}}</small>-->
                 </div>
                 <div class="mb-4">
-                  <label class="eden-text-input">
+                  <span class="fw-bolder body-1">Company Mail</span>
+                  <label class="eden-text-input mt-3">
                     <input class="form-control" placeholder="Email Address">
                     <!--                    <span v-if="$v.form.email.$error" class="ed-x"></span>-->
                   </label>
                   <!--                  <small class="fs-7 text-bad-red" v-if="$v.form.email.$error">{{emailErr}}</small>-->
                 </div>
                 <div class="mb-4">
-                  <SelectComponent placeholder="Company Type" />
-                </div>
-                <div class="mb-4">
-                  <label class="eden-text-input">
+                  <span class="fw-bolder body-1">Official Number</span>
+                  <label class="eden-text-input mt-3">
                     <input class="form-control" placeholder="2345K-JU83-73763">
                     <!--                    <span v-if="$v.form.email.$error" class="ed-x"></span>-->
                   </label>
                   <!--                  <small class="fs-7 text-bad-red" v-if="$v.form.email.$error">{{emailErr}}</small>-->
                 </div>
                 <div class="mb-4">
-                  <label class="eden-text-input">
-                    <input class="form-control" placeholder="2345K-JU83-73763">
+                  <span class="fw-bolder body-1">Company Type</span>
+                  <SelectComponent class="mt-3" placeholder="Company Type" />
+                </div>
+                <div class="mb-4">
+                  <span class="fw-bolder body-1">Business Registration Number</span>
+                  <label class="eden-text-input mt-3">
+                    <input class="form-control" placeholder="">
                     <!--                    <span v-if="$v.form.email.$error" class="ed-x"></span>-->
                   </label>
                   <!--                  <small class="fs-7 text-bad-red" v-if="$v.form.email.$error">{{emailErr}}</small>-->
                 </div>
                 <div class="mb-4">
-                  <label class="eden-text-input">
-                    <input class="form-control" placeholder="2345K-JU83-73763">
+                  <span class="fw-bolder body-1">Tax Identification Number</span>
+                  <label class="eden-text-input mt-3">
+                    <input class="form-control" placeholder="">
                     <!--                    <span v-if="$v.form.email.$error" class="ed-x"></span>-->
                   </label>
                   <!--                  <small class="fs-7 text-bad-red" v-if="$v.form.email.$error">{{emailErr}}</small>-->
